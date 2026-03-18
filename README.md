@@ -1,6 +1,6 @@
 # 📺 NetCast
 
-My TV remote went to get milk, so had to built an AD-FREE alternative from scratch
+My TV remote left to get milk, so had to built an AD-FREE alternative from scratch
 
 NetCast is a cross-platform mobile app built with React Native that turns your phone into a lightning-fast, fully functional smart TV remote. 
 
