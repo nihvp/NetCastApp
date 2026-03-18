@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, Modal, Button, useColorScheme, Switch, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Modal, Button, useColorScheme, Switch, Pressable} from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { useThrottle } from './useThrottle';
-
+// hey
 const hapticOptions = { enableVibrateFallback: true, ignoreAndroidSystemSettings: false };
 
 const KEYS = {
@@ -43,24 +43,6 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
       clearTimeout(timeoutId);
       Alert.alert('Connection Lost', 'Could not reach the TV.');
       onDisconnect();
-    }
-  };
-
-  const sendText = async () => {
-    if (!inputText) return;
-    
-    const xmlPayload = `<?xml version="1.0" encoding="utf-8"?><command><session>${sessionId}</session><type>HandleTextInput</type><value>${inputText}</value></command>`;
-    
-    try {
-      await fetch(`http://${ipAddress}:8080/roap/api/command`, {
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/atom+xml' },
-        body: xmlPayload
-      });
-      setInputText('');
-      setShowKeyboard(false);
-    } catch (error) {
-      Alert.alert('Error', 'Failed to send text.');
     }
   };
 
@@ -124,11 +106,14 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
       </View>
 
       <Button title="Open Numpad" color={isDark ? '#4DA8DA' : '#007AFF'} onPress={() => setShowKeypad(true)} />
-      <Button title="Open Keyboard" color={isDark ? '#4DA8DA' : '#007AFF'} onPress={() => setShowKeyboard(true)} />
 
-      <Modal visible={showKeypad} animationType="slide" transparent={true}>
-        <View style={theme.modalContainer}>
-          <View style={theme.keypad}>
+      <Modal visible={showKeypad} animationType="slide" transparent={true} onRequestClose={() => setShowKeypad(false)}>
+        <TouchableOpacity 
+          style={theme.modalContainer} 
+          activeOpacity={1} 
+          onPressOut={() => setShowKeypad(false)}
+        >
+        <Pressable style={theme.keypad} onPress={(e) => e.stopPropagation()}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
               <TouchableOpacity key={num} style={theme.numBtn} onPress={() => handlePress(NUM_KEYS[num])}>
                 <Text style={theme.numText}>{num}</Text>
@@ -141,35 +126,8 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
             <TouchableOpacity style={theme.closeBtn} onPress={() => setShowKeypad(false)}>
               <Text style={theme.numText}>X</Text>
             </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-      
-      {/* Keyboard Modal */}
-      <Modal visible={showKeyboard} animationType="slide" transparent={true}>
-        <KeyboardAvoidingView 
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
-          style={theme.modalContainerCentered}
-        >
-          <View style={theme.settingsPanel}>
-            <Text style={theme.settingsHeader}>Send Text to TV</Text>
-            
-            <TextInput 
-              style={theme.textInput}
-              placeholder="Type here..."
-              placeholderTextColor="#888"
-              value={inputText}
-              onChangeText={setInputText}
-              autoFocus={true}
-            />
-            
-            <View style={theme.row}>
-              <Button title="Cancel" color="#FF3B30" onPress={() => setShowKeyboard(false)} />
-              <View style={{ width: 20 }} />
-              <Button title="Send" onPress={sendText} />
-            </View>
-          </View>
-        </KeyboardAvoidingView>
+          </Pressable>
+        </TouchableOpacity>
       </Modal>
       
       <Modal visible={showSettings} animationType="fade" transparent={true}>
@@ -205,8 +163,8 @@ const baseStyles = {
   dpad: { alignItems: 'center', marginVertical: 30 },
   btn: { padding: 15, margin: 5, borderRadius: 8, minWidth: 60, alignItems: 'center' },
   modalContainer: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.7)' },
-  modalContainerCentered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.7)' },
-  keypad: { flexDirection: 'row', flexWrap: 'wrap', padding: 20, justifyContent: 'center', borderTopLeftRadius: 20, borderTopRightRadius: 20 },
+  modalContainerCentered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.6)' },
+  keypad: { flexDirection: 'row', flexWrap: 'wrap', padding: 20, justifyContent: 'center', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingBottom: 40 },
   numBtn: { width: '30%', padding: 20, margin: '1%', alignItems: 'center', borderRadius: 10 },
   emptyBtn: { width: '30%', margin: '1%' },
   closeBtn: { width: '30%', padding: 20, margin: '1%', alignItems: 'center', borderRadius: 10 },
@@ -228,8 +186,7 @@ const lightStyles = StyleSheet.create({
   numText: { fontSize: 24, fontWeight: 'bold', color: '#000' },
   settingsPanel: { ...baseStyles.settingsPanel, backgroundColor: '#FFFFFF' },
   settingsHeader: { fontSize: 22, fontWeight: 'bold', color: '#000', marginBottom: 10 },
-  infoText: { color: '#000', fontSize: 16 },
-  textInput: { width: '100%', borderWidth: 1, borderColor: '#ccc', padding: 10, borderRadius: 8, color: '#000', marginBottom: 20 }
+  infoText: { color: '#000', fontSize: 16 }
 });
 
 const darkStyles = StyleSheet.create({
@@ -245,6 +202,5 @@ const darkStyles = StyleSheet.create({
   numText: { fontSize: 24, fontWeight: 'bold', color: '#FFFFFF' },
   settingsPanel: { ...baseStyles.settingsPanel, backgroundColor: '#1C1C1E' },
   settingsHeader: { fontSize: 22, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 10 },
-  infoText: { color: '#FFF', fontSize: 16 },
-  textInput: { width: '100%', borderWidth: 1, borderColor: '#555', padding: 10, borderRadius: 8, color: '#FFF', marginBottom: 20 }
+  infoText: { color: '#FFF', fontSize: 16 }
   });
