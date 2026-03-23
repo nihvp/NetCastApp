@@ -1,6 +1,6 @@
 # 📺 NetCastApp
 
-My LG TV remote decided to go get milk, so had to built an AD-FREE alternative app from scratch
+My LG TV remote waved its final goodbyes, so I built an AD-FREE alternative app!
 
 NetCast is a cross-platform mobile app built with React Native that turns your phone into a lightning-fast, fully functional smart TV remote. 
 
