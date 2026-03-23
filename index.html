@@ -3,427 +3,330 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetCastApp - Your Phone, Your Remote</title>
+    <title>NetCastApp | Open Source TV Remote</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --border: #334155;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-hover: #0284c7;
+            --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             line-height: 1.6;
-            color: #333;
-            background: #f8f9fa;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 80px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.2"/></svg>');
-            background-size: 50px;
-            opacity: 0.3;
-        }
-
-        .header-content {
-            position: relative;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header h1 {
-            font-size: 3.5em;
-            margin-bottom: 20px;
-            animation: fadeInUp 0.8s ease;
-        }
-
-        .header .subtitle {
-            font-size: 1.3em;
-            margin-bottom: 30px;
-            opacity: 0.95;
-            animation: fadeInUp 0.8s ease 0.2s both;
-        }
-
-        .header .tagline {
-            font-size: 1.1em;
-            margin-bottom: 40px;
-            opacity: 0.85;
-            animation: fadeInUp 0.8s ease 0.4s both;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-            animation: fadeInUp 0.8s ease 0.6s both;
-        }
-
-        .btn {
-            padding: 15px 35px;
-            font-size: 1.1em;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-        }
-
-        .btn-primary {
-            background: white;
-            color: #667eea;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.3);
-            transform: translateY(-3px);
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 80px 20px;
-        }
-
-        .section-title {
-            font-size: 2.5em;
-            text-align: center;
-            margin-bottom: 60px;
-            color: #2d3748;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-
-        .feature-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 5rem 2rem;
             text-align: center;
         }
 
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        /* Typography */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            color: #fff;
         }
 
-        .feature-icon {
-            font-size: 3em;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5em;
-            margin-bottom: 15px;
-            color: #667eea;
-        }
-
-        .feature-card p {
-            color: #666;
-            line-height: 1.8;
-        }
-
-        .tech-stack {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            padding: 80px 20px;
-        }
-
-        .tech-stack .section-title {
-            color: white;
-        }
-
-        .tech-items {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .tech-item {
-            background: rgba(255,255,255,0.2);
-            padding: 15px 30px;
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
+        h2 {
+            font-size: 1.5rem;
             font-weight: 600;
-            transition: all 0.3s ease;
+            margin-bottom: 1.5rem;
+            color: #fff;
         }
 
-        .tech-item:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.05);
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.25rem;
+            margin: 0 auto 2.5rem auto;
+            max-width: 600px;
         }
 
-        .setup-section {
-            background: #2d3748;
-            color: white;
-            padding: 80px 20px;
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .setup-section .section-title {
-            color: white;
-        }
-
-        .setup-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 40px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .setup-card {
-            background: rgba(255,255,255,0.05);
-            padding: 40px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .setup-card h3 {
-            font-size: 2em;
-            margin-bottom: 25px;
-            color: #f093fb;
-        }
-
-        .setup-card p {
-            margin-bottom: 20px;
-            color: #cbd5e0;
-        }
-
-        .setup-card code {
-            display: block;
-            background: rgba(0,0,0,0.3);
-            padding: 20px;
-            border-radius: 8px;
-            margin: 15px 0;
-            overflow-x: auto;
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 0.9em;
-            line-height: 1.8;
-            color: #a0d9f0;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            background: #1a202c;
-            color: #cbd5e0;
-        }
-
-        .footer a {
-            color: #667eea;
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
             text-decoration: none;
-            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, background-color 0.2s ease;
         }
 
-        .footer a:hover {
-            color: #764ba2;
+        .btn-primary {
+            background: var(--accent);
+            color: #0f172a;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(56, 189, 248, 0.2);
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2.5em;
-            }
-
-            .header .subtitle {
-                font-size: 1.1em;
-            }
-
-            .setup-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .setup-card {
-                padding: 30px 20px;
-            }
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
         }
 
-        .highlight {
-            color: #f093fb;
-            font-weight: bold;
+        .btn-secondary:hover {
+            background: var(--surface);
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
 
-        .emoji {
-            display: inline-block;
-            animation: bounce 2s ease infinite;
+        /* Tags */
+        .tags {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        .tag {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+
+        .tag:hover {
+            background: var(--border);
+            color: var(--text);
+            transform: translateY(-1px);
+        }
+
+        /* Cards & Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: left; /* Aligned text to the left */
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* FAQ Section */
+        .faq-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-item h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Code & Links */
+        pre {
+            background: #000;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            color: #a5b4fc;
+            font-size: 0.85rem;
+        }
+
+        p code {
+            background: rgba(0,0,0,0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--accent-hover);
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .container { padding: 3rem 1.5rem; }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <h1>📺 NetCastApp</h1>
-            <p class="subtitle">Your Phone, Your Remote</p>
-            <p class="tagline">My LG TV remote decided to go get milk, so I built an <span class="highlight">AD-FREE</span> alternative app from scratch</p>
-            <div class="cta-buttons">
+    <main class="container">
+        <header>
+            <h1>NetCastApp</h1>
+            <p class="subtitle">My LG TV remote disappeared, so I built an open-source, ad-free replacement. Works on iOS and Android.</p>
+            
+            <div class="button-group">
                 <a href="https://github.com/nihvp/NetCastApp/releases" class="btn btn-primary">
-                    <span>📥</span> Download for Android
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    Download APK
                 </a>
                 <a href="https://github.com/nihvp/NetCastApp" class="btn btn-secondary">
-                    <span>⭐</span> View on GitHub
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path></svg>
+                    Source Code
                 </a>
             </div>
-        </div>
-    </header>
 
-    <section class="container">
-        <h2 class="section-title">Why NetCastApp?</h2>
-        <div class="features">
-            <div class="feature-card">
-                <span class="feature-icon">📱</span>
-                <h3>iOS & Android Ready</h3>
-                <p>Control your TV from any phone. Built with React Native for seamless cross-platform experience.</p>
+            <div class="tags">
+                <span class="tag">React Native</span>
+                <span class="tag">UDP Networking</span>
+                <span class="tag">Zero Tracking</span>
+                <span class="tag">AsyncStorage</span>
             </div>
-            <div class="feature-card">
-                <span class="feature-icon">⚡</span>
-                <h3>Instant Reconnects</h3>
-                <p>Silently re-establishes the connection when you bring the app back from the background. No more manual reconnecting!</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">📳</span>
-                <h3>Haptic Feedback</h3>
-                <p>Satisfying physical responses when you tap buttons. Feel every interaction like a real remote.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">💾</span>
-                <h3>It Remembers You</h3>
-                <p>Securely saves your TV's IP address, Session ID, and PIN so you never have to pair it twice.</p>
-            </div>
-        </div>
-    </section>
+        </header>
 
-    <section class="tech-stack">
-        <div class="container">
-            <h2 class="section-title">Built With Modern Tech</h2>
-            <div class="tech-items">
-                <div class="tech-item">⚛️ React Native</div>
-                <div class="tech-item">💾 AsyncStorage</div>
-                <div class="tech-item">🌐 UDP Networking</div>
-                <div class="tech-item">📳 Haptic Feedback</div>
-                <div class="tech-item">🔒 Safe Area Context</div>
+        <section class="grid">
+            <div class="card">
+                <h3>⚡ Instant Reconnect</h3>
+                <p>Silently re-establishes the connection when you bring the app back from the background. No manual toggling required.</p>
             </div>
-        </div>
-    </section>
+            <div class="card">
+                <h3>📳 Haptic Feedback</h3>
+                <p>Satisfying tactile responses when you tap buttons, mimicking the feel of a physical remote.</p>
+            </div>
+            <div class="card">
+                <h3>💾 Local Memory</h3>
+                <p>Securely saves your TV's IP address, Session ID, and PIN so you only have to pair it once.</p>
+            </div>
+        </section>
 
-    <section class="setup-section">
-        <div class="container">
-            <h2 class="section-title">Get Started</h2>
-            <div class="setup-cards">
-                <div class="setup-card">
-                    <h3>📱 Android Setup</h3>
-                    <p>Quick and easy installation:</p>
-                    <ol style="line-height: 2; margin-left: 20px; color: #cbd5e0;">
-                        <li>Go to <a href="https://github.com/nihvp/NetCastApp/releases" style="color: #f093fb;">releases</a></li>
-                        <li>Download the latest .apk file</li>
-                        <li>Install and enjoy!</li>
-                    </ol>
+        <section>
+            <h2>Installation</h2>
+            <div class="grid" style="margin-bottom: 4rem;">
+                <div class="card">
+                    <h3>Android</h3>
+                    <p>Grab the latest <code>.apk</code> file from the <a href="https://github.com/nihvp/NetCastApp/releases">releases page</a> and install it directly on your device.</p>
                 </div>
-
-                <div class="setup-card">
-                    <h3>🍎 iOS Setup</h3>
-                    <p>Run locally with these commands:</p>
-                    <code>git clone https://github.com/nihvp/NetCastApp.git
-cd NetCastApp
-npm install
+                
+                <div class="card">
+                    <h3>iOS</h3>
+                    <p>Due to App Store restrictions, you'll need to build it locally:</p>
+                    <p>On your Mac, open Terminal and run:</p>
+                    <pre><code>git clone https://github.com/nihvp/NetCastApp.git
+cd NetCastApp && npm install
 cd ios && pod install && cd ..
-npx react-native run-ios</code>
-                    <p style="margin-top: 15px; font-size: 0.9em;">Make sure you have your React Native environment set up (Node, Watchman, and Xcode).</p>
+npx react-native run-ios</code></pre>
+                    <p>Make sure you have your React Native environment set up (Node, Watchman, and Xcode).</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="container" style="text-align: center;">
-        <h2 class="section-title">Features You'll Love</h2>
-        <div style="max-width: 800px; margin: 0 auto; font-size: 1.1em; color: #666; line-height: 2;">
-            <p>✓ Lightning-fast response times</p>
-            <p>✓ No ads, no tracking, no nonsense</p>
-            <p>✓ Completely free and open source</p>
-            <p>✓ Works exactly like your original remote</p>
-            <p>✓ Auto-reconnects when you need it</p>
-            <p>✓ Secure local network communication</p>
-        </div>
-    </section>
+        <section>
+            <h2>FAQ</h2>
+            <div class="card" style="margin-bottom: 4rem;">
+                <div class="faq-item">
+                    <h3>Does this work with older LG TVs?</h3>
+                    <p>NetCastApp relies on NetCast protocols. If your TV was made before 2014 and connects to WiFi, it should work seamlessly.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Why do I need to enter a PIN?</h3>
+                    <p>This is a standard security feature required by the TV to ensure only authorized devices on your local network can control it.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>Is it really ad-free?</h3>
+                    <p>Yes. The app is completely open-source and free of ads, tracking scripts, and paywalls.</p>
+                </div>
+            </div>
+        </section>
 
-    <footer class="footer">
-        <p>Built with ❤️ (and a lot of Gradle troubleshooting)</p>
-        <p style="margin-top: 10px;">
-            <a href="https://github.com/nihvp/NetCastApp">GitHub</a> •
-            <a href="https://github.com/nihvp/NetCastApp/releases">Releases</a> •
-            <a href="https://github.com/nihvp/NetCastApp/issues">Issues</a>
-        </p>
-    </footer>
-
-    <script>
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
-
-        // Add subtle parallax effect to header
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('.header');
-            const scrolled = window.pageYOffset;
-            header.style.transform = `translateY(${scrolled * 0.5}px)`;
-        });
-    </script>
+        <footer>
+            <div>Built to solve a problem, not sell your data.</div>
+            <div class="footer-links">
+                <a href="https://github.com/nihvp/NetCastApp">GitHub</a>
+                <a href="https://github.com/nihvp/NetCastApp/issues">Report an Issue</a>
+            </div>
+        </footer>
+    </main>
 </body>
 </html>
