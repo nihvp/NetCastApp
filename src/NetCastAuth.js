@@ -11,15 +11,27 @@ export default function NetCastAuth({ onAuthSuccess }) {
   const theme = isDark ? darkStyles : lightStyles;
 
   const requestPin = async () => {
+    // 1. Clean and Validate the IP
+    const cleanIp = ipAddress.trim();
+    const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
+    if (!ipRegex.test(cleanIp)) {
+      Alert.alert("Invalid IP", "Please enter a valid format (e.g., 192.168.1.5)");
+      return; // Stop execution here
+    }
+
+    setIpAddress(cleanIp); // Update state to the clean version
     setLoading(true);
+
+    // 2. Proceed with connection
     const xml = `<?xml version="1.0" encoding="utf-8"?><auth><type>AuthKeyReq</type></auth>`;
     try {
-      await fetch(`http://${ipAddress}:8080/roap/api/auth`, {
+      await fetch(`http://${cleanIp}:8080/roap/api/auth`, {
         method: 'POST', headers: { 'Content-Type': 'application/atom+xml' }, body: xml
       });
       setStep(2);
     } catch (e) { 
-      Alert.alert('Error', 'Could not reach TV.'); 
+      Alert.alert('Error', 'Could not reach TV. Ensure both devices are on the same Wi-Fi.'); 
     }
     setLoading(false);
   };
@@ -57,6 +69,8 @@ export default function NetCastAuth({ onAuthSuccess }) {
             value={ipAddress} 
             onChangeText={setIpAddress} 
             keyboardType="numeric" 
+            autoCorrect={false}
+            autoCapitalize="none"
           />
           {loading ? <ActivityIndicator /> : <Button title="Get PIN" onPress={requestPin} />}
         </>
