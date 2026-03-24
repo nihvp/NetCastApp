@@ -1,4 +1,4 @@
-# 📺 NetCast
+# 📺 NetCastApp
 *A high-performance, cross-platform smart TV remote built with React Native.*
 
 My physical LG TV waved its final goodbyes, so I engineered an ad-free, hardware-mimicking alternative. NetCast communicates directly with the TV over the local network using the ROAP (Remote Office Action Protocol) via XML payloads, providing a lightning-fast, zero-latency experience.
