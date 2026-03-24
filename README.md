@@ -3,6 +3,19 @@
 
 My physical LG TV waved its final goodbyes, so I engineered an ad-free, hardware-mimicking alternative. NetCast communicates directly with the TV over the local network using the ROAP (Remote Office Action Protocol) via XML payloads, providing a lightning-fast, zero-latency experience.
 
+## 📸 Screenshots
+
+<p align="center">
+  <img src="assets/screenshot_1.jpeg" width="30%" alt="NetCast Screenshot 1" />
+  <img src="assets/screenshot_2.jpeg" width="30%" alt="NetCast Screenshot 2" />
+  <img src="assets/screenshot_3.jpeg" width="30%" alt="NetCast Screenshot 3" />
+</p>
+<p align="center">
+  <img src="assets/screenshot_4.jpeg" width="30%" alt="NetCast Screenshot 4" />
+  <img src="assets/screenshot_5.jpeg" width="30%" alt="NetCast Screenshot 5" />
+  <img src="assets/screenshot_6.jpeg" width="30%" alt="NetCast Screenshot 6" />
+</p>
+
 ## ✨ Features
 
 * **Cross-Platform Control:** Fully functional on both iOS and Android.
@@ -40,15 +53,15 @@ npx react-native run-ios
 ```
 
 ## 🛠️ Tech Stack & Architecture
-Framework: React Native
+* Framework: React Native
 
-Networking: Standard fetch API for raw XML HTTP POST requests (ROAP API)
+* Networking: Standard fetch API for raw XML HTTP POST requests (ROAP API)
 
-State Management & Caching: React Hooks (useState, useRef), @react-native-async-storage/async-storage
+* State Management & Caching: React Hooks (useState, useRef), @react-native-async-storage/async-storage
 
-Hardware APIs: react-native-haptic-feedback, PanResponder (Touch Gestures)
+* Hardware APIs: react-native-haptic-feedback, PanResponder (Touch Gestures)
 
-CI/CD: Automated Android keystore management and GitHub Releases
+* CI/CD: Automated Android keystore management and GitHub Releases
 
 ##
 Built with ❤️ (and a lot of Gradle troubleshooting).
