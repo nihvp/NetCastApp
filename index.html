@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetCastApp | Open Source TV Remote</title>
+    <title>NetCast | High-Performance LG TV Remote App</title>
     <style>
         :root {
             --bg: #0f172a;
@@ -27,7 +27,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 5rem 2rem;
             text-align: center;
@@ -43,30 +43,31 @@
         }
 
         h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
             color: #fff;
+            text-align: center;
         }
 
         .subtitle {
             color: var(--text-muted);
             font-size: 1.25rem;
             margin: 0 auto 2.5rem auto;
-            max-width: 600px;
+            max-width: 700px;
         }
 
         /* Buttons */
         .button-group {
             display: flex;
             gap: 1rem;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
             justify-content: center;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 0.75rem 1.5rem;
+            padding: 0.85rem 1.75rem;
             border-radius: 0.5rem;
             font-weight: 600;
             text-decoration: none;
@@ -113,18 +114,61 @@
         .tag {
             background: var(--surface);
             border: 1px solid var(--border);
-            padding: 0.25rem 0.75rem;
+            padding: 0.35rem 1rem;
             border-radius: 999px;
             font-size: 0.85rem;
-            color: var(--text-muted);
+            font-weight: 500;
+            color: var(--accent);
             transition: all 0.2s ease;
             cursor: default;
         }
 
         .tag:hover {
             background: var(--border);
-            color: var(--text);
+            color: #fff;
             transform: translateY(-1px);
+        }
+
+        /* Screenshots Section */
+        .screenshot-showcase {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 5rem;
+            flex-wrap: wrap;
+        }
+
+        .mockup {
+            width: 260px;
+            height: 540px;
+            background: #000;
+            border: 8px solid var(--surface);
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .mockup:hover {
+            transform: translateY(-10px);
+        }
+
+        .mockup img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /*opacity: 0.8; Remove this when you add real images */
+        }
+
+        .mockup-placeholder-text {
+            position: absolute;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
         }
 
         /* Cards & Grid */
@@ -132,15 +176,15 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
         }
 
         .card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            text-align: left; /* Aligned text to the left */
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: left;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -151,43 +195,76 @@
         }
 
         .card h3 {
-            margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
             color: #fff;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .card p {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
-        /* FAQ Section */
-        .faq-item {
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
+        /* Accordion FAQ */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto 5rem auto;
         }
 
-        .faq-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        details {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            text-align: left;
+            transition: border-color 0.2s ease;
         }
 
-        .faq-item h3 {
-            color: #fff;
-            margin-bottom: 0.5rem;
+        details:hover {
+            border-color: var(--text-muted);
+        }
+
+        summary {
+            padding: 1.5rem;
             font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            cursor: pointer;
+            list-style: none; /* Hide default arrow */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        summary::-webkit-details-marker {
+            display: none; /* Hide default arrow in Safari */
+        }
+
+        summary::after {
+            content: '+';
+            color: var(--accent);
+            font-size: 1.5rem;
+            line-height: 1;
+            transition: transform 0.2s ease;
+        }
+
+        details[open] summary::after {
+            content: '−';
+            transform: rotate(180deg);
+        }
+
+        details p {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            color: var(--text-muted);
+            border-top: 1px solid transparent;
         }
 
         /* Code & Links */
         pre {
             background: #000;
-            padding: 1.25rem;
-            border-radius: 0.5rem;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
             overflow-x: auto;
             margin-top: 1rem;
             border: 1px solid var(--border);
@@ -197,7 +274,7 @@
         code {
             font-family: var(--font-mono);
             color: #a5b4fc;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         p code {
@@ -219,10 +296,10 @@
         /* Footer */
         footer {
             margin-top: 4rem;
-            padding-top: 2rem;
+            padding-top: 3rem;
             border-top: 1px solid var(--border);
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             display: flex;
             flex-direction: column;
             gap: 1rem;
@@ -231,13 +308,14 @@
 
         .footer-links {
             display: flex;
-            gap: 1rem;
+            gap: 1.5rem;
             justify-content: center;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .container { padding: 3rem 1.5rem; }
+            .mockup { width: 220px; height: 460px; }
         }
     </style>
 </head>
@@ -245,7 +323,7 @@
     <main class="container">
         <header>
             <h1>NetCastApp</h1>
-            <p class="subtitle">My LG TV remote disappeared, so I built an open-source, ad-free replacement. Works on iOS and Android.</p>
+            <p class="subtitle">My LG TV remote waved its final goodbyes, so I engineered an ad-free, hardware-mimicking alternative built on React Native.</p>
             
             <div class="button-group">
                 <a href="https://github.com/nihvp/NetCastApp/releases" class="btn btn-primary">
@@ -260,70 +338,104 @@
 
             <div class="tags">
                 <span class="tag">React Native</span>
+                <span class="tag">ROAP Protocol</span>
                 <span class="tag">UDP Networking</span>
-                <span class="tag">Zero Tracking</span>
+                <span class="tag">XML Payloads</span>
+                <span class="tag">PanResponder</span>
                 <span class="tag">AsyncStorage</span>
             </div>
         </header>
 
+        <section class="screenshot-showcase">
+            <div class="mockup">
+                <img src="assets/screenshot_1.jpeg" alt="NetCast Screen 1" />
+            </div>
+            <div class="mockup">
+                <img src="assets/screenshot_2.jpeg" alt="NetCast Screen 2" />
+            </div>
+            <div class="mockup">
+                <img src="assets/screenshot_3.jpeg" alt="NetCast Screen 3" />
+            </div>
+            <div class="mockup">
+                <img src="assets/screenshot_4.jpeg" alt="NetCast Screen 4" />
+            </div>
+            <div class="mockup">
+                <img src="assets/screenshot_5.jpeg" alt="NetCast Screen 5" />
+            </div>
+            <div class="mockup">
+                <img src="assets/screenshot_6.jpeg" alt="NetCast Screen 6" />
+            </div>
+        </section>
+
         <section class="grid">
             <div class="card">
-                <h3>⚡ Instant Reconnect</h3>
-                <p>Silently re-establishes the connection when you bring the app back from the background. No manual toggling required.</p>
+                <h3>🖱️ Magic Trackpad</h3>
+                <p>Uses custom gesture tracking with throttled coordinate mapping to perfectly replicate the TV's native pointer functionality.</p>
             </div>
             <div class="card">
-                <h3>📳 Haptic Feedback</h3>
-                <p>Satisfying tactile responses when you tap buttons, mimicking the feel of a physical remote.</p>
+                <h3>📳 Hardware-Like UX</h3>
+                <p>Integrates tactile haptic feedback and authentic, accessibility-standard UI design (including geometric dot patterns for colorblind users).</p>
             </div>
             <div class="card">
-                <h3>💾 Local Memory</h3>
-                <p>Securely saves your TV's IP address, Session ID, and PIN so you only have to pair it once.</p>
+                <h3>⚡ Zero-Config Sessions</h3>
+                <p>Securely caches the TV's IP, Session ID, and PIN via AsyncStorage, instantly executing silent handshakes when the app returns from the background.</p>
+            </div>
+            <div class="card">
+                <h3>🛡️ Bulletproof Inputs</h3>
+                <p>Built-in IPv4 regex validation prevents malformed network requests before they ever execute.</p>
+            </div>
+            <div class="card">
+                <h3>📡 Network Stability</h3>
+                <p>Implements custom input throttling to prevent packet loss or TV processor crashes during rapid button presses.</p>
+            </div>
+            <div class="card">
+                <h3>📱 Cross-Platform</h3>
+                <p>Communicates directly with the TV over the local network using the ROAP protocol, providing a zero-latency experience on iOS and Android.</p>
             </div>
         </section>
 
         <section>
             <h2>Installation</h2>
-            <div class="grid" style="margin-bottom: 4rem;">
+            <div class="grid" style="margin-bottom: 5rem;">
                 <div class="card">
                     <h3>Android</h3>
-                    <p>Grab the latest <code>.apk</code> file from the <a href="https://github.com/nihvp/NetCastApp/releases">releases page</a> and install it directly on your device.</p>
+                    <p>Grab the latest <code>app-release.apk</code> file from the <a href="https://github.com/nihvp/NetCastApp/releases">releases page</a> and install it directly on your device (ensure "Install from unknown sources" is enabled).</p>
                 </div>
                 
                 <div class="card">
                     <h3>iOS</h3>
-                    <p>Due to App Store restrictions, you'll need to build it locally:</p>
-                    <p>On your Mac, open Terminal and run:</p>
+                    <p>Due to App Store restriction you will need to build locally. To run the project locally on an iPhone or Simulator, ensure your React Native environment is configured:</p>
                     <pre><code>git clone https://github.com/nihvp/NetCastApp.git
 cd NetCastApp && npm install
 cd ios && pod install && cd ..
 npx react-native run-ios</code></pre>
-                    <p>Make sure you have your React Native environment set up (Node, Watchman, and Xcode).</p>
                 </div>
             </div>
         </section>
 
-        <section>
-            <h2>FAQ</h2>
-            <div class="card" style="margin-bottom: 4rem;">
-                <div class="faq-item">
-                    <h3>Does this work with older LG TVs?</h3>
-                    <p>NetCastApp relies on NetCast protocols. If your TV was made before 2014 and connects to WiFi, it should work seamlessly.</p>
-                </div>
-                <div class="faq-item">
-                    <h3>Why do I need to enter a PIN?</h3>
-                    <p>This is a standard security feature required by the TV to ensure only authorized devices on your local network can control it.</p>
-                </div>
-                <div class="faq-item">
-                    <h3>Is it really ad-free?</h3>
-                    <p>Yes. The app is completely open-source and free of ads, tracking scripts, and paywalls.</p>
-                </div>
-            </div>
+        <section class="faq-container">
+            <h2>Frequently Asked Questions</h2>
+            
+            <details open>
+                <summary>Does this work with older LG TVs?</summary>
+                <p>NetCastApp relies on the Remote Office Action Protocol (ROAP). If your Smart TV was made before 2014 and connects to WiFi, it should work seamlessly.</p>
+            </details>
+
+            <details open>
+                <summary>Why do I need to enter a PIN?</summary>
+                <p>This is a standard security handshake required by the TV to ensure only authorized local network clients can control it via XML payloads.</p>
+            </details>
+
+            <details open>
+                <summary>Is it really ad-free?</summary>
+                <p>Yes. The application is completely open-source and free of ads, tracking scripts, telemetry, and paywalls.</p>
+            </details>
         </section>
 
         <footer>
             <div>Built to solve a problem, not sell your data.</div>
             <div class="footer-links">
-                <a href="https://github.com/nihvp/NetCastApp">GitHub</a>
+                <a href="https://github.com/nihvp/NetCastApp">GitHub Repository</a>
                 <a href="https://github.com/nihvp/NetCastApp/issues">Report an Issue</a>
             </div>
         </footer>
