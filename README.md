@@ -1,7 +1,7 @@
 # 📺 NetCastApp
 *A high-performance, cross-platform smart TV remote built with React Native.*
 
-My physical LG TV waved its final goodbyes, so I engineered an ad-free, hardware-mimicking alternative. NetCast communicates directly with the TV over the local network using the ROAP (Remote Office Action Protocol) via XML payloads, providing a lightning-fast, zero-latency experience.
+My physical LG TV remote waved its final goodbyes, so I engineered an ad-free, hardware-mimicking alternative. NetCast communicates directly with the TV over the local network using the ROAP (Remote Office Action Protocol) via XML payloads, providing a lightning-fast, zero-latency experience.
 
 ## 📸 Screenshots
 
@@ -33,7 +33,7 @@ My physical LG TV waved its final goodbyes, so I engineered an ad-free, hardware
 3. Install on your Android device (ensure "Install from unknown sources" is enabled).
 
 ### iOS Local Setup
-Due to App Store restriction you will need to build locally. To run the project locally on an iPhone or the iOS Simulator, ensure your React Native environment (Node, Watchman, Ruby, Xcode) is configured.
+Due to App Store restriction you will need to build locally. To run the project locally on an iPhone or the iOS Simulator, ensure your React Native environment (Node, Watchman, Ruby, Xcode) is configured on a mac computer.
 
 ```bash
 # Clone the repository
