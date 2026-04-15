@@ -37,7 +37,7 @@ Due to App Store restriction you will need to build locally. To run the project 
 
 ```bash
 # Clone the repository
-git clone [https://github.com/nihvp/NetCastApp.git](https://github.com/nihvp/NetCastApp.git)
+git clone https://github.com/nihvp/NetCastApp.git
 cd NetCastApp
 
 # Install JavaScript dependencies
