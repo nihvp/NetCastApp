@@ -403,10 +403,20 @@
                 
                 <div class="card">
                     <h3>iOS</h3>
-                    <p>Due to App Store restriction you will need to build locally. To run the project locally on an iPhone or Simulator, ensure your React Native environment is configured:</p>
-                    <pre><code>git clone https://github.com/nihvp/NetCastApp.git
-cd NetCastApp && npm install
-cd ios && pod install && cd ..
+                    <p>Due to App Store restriction you will need to build locally. To run the project locally on an iPhone or the iOS Simulator, ensure your React Native environment (Node, Watchman, Ruby, Xcode) is configured on a mac computer:</p>
+                    <pre><code># Clone the repository
+git clone https://github.com/nihvp/NetCastApp.git
+cd NetCastApp
+
+# Install JavaScript dependencies
+npm install
+
+# Install Native iOS bridging files
+cd ios
+pod install
+cd ..
+
+# Launch the app
 npx react-native run-ios</code></pre>
                 </div>
             </div>
