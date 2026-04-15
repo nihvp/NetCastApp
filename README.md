@@ -6,14 +6,14 @@ My physical LG TV remote waved its final goodbyes, so I engineered an ad-free, h
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="assets/screenshot_1.jpeg" width="30%" alt="NetCast Screenshot 1" />
-  <img src="assets/screenshot_2.jpeg" width="30%" alt="NetCast Screenshot 2" />
-  <img src="assets/screenshot_3.jpeg" width="30%" alt="NetCast Screenshot 3" />
+  <img src="docs/assets/screenshot_1.jpeg" width="30%" alt="NetCast Screenshot 1" />
+  <img src="docs/assets/screenshot_2.jpeg" width="30%" alt="NetCast Screenshot 2" />
+  <img src="docs/assets/screenshot_3.jpeg" width="30%" alt="NetCast Screenshot 3" />
 </p>
 <p align="center">
-  <img src="assets/screenshot_6.jpeg" width="30%" alt="NetCast Screenshot 4" />
-  <img src="assets/screenshot_4.jpeg" width="30%" alt="NetCast Screenshot 5" />
-  <img src="assets/screenshot_5.jpeg" width="30%" alt="NetCast Screenshot 6" />
+  <img src="docs/assets/screenshot_6.jpeg" width="30%" alt="NetCast Screenshot 4" />
+  <img src="docs/assets/screenshot_4.jpeg" width="30%" alt="NetCast Screenshot 5" />
+  <img src="docs/assets/screenshot_5.jpeg" width="30%" alt="NetCast Screenshot 6" />
 </p>
 
 ## ✨ Features
