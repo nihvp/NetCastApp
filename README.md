@@ -65,3 +65,6 @@ npx react-native run-ios
 
 ##
 Built with ❤️ (and a lot of Gradle troubleshooting).
+
+DISCLAIMER: This application is an independent third-party tool and is NOT affiliated with, endorsed by, or associated with LG Electronics Inc. "LG" and "NetCast" are registered trademarks of LG Electronics Inc.
+
