@@ -3,7 +3,7 @@
 
 My physical LG TV remote waved its final goodbyes, so I engineered an ad-free, hardware-mimicking alternative. NetCast communicates directly with the TV over the local network using the ROAP (Remote Office Action Protocol) via XML payloads, providing a lightning-fast, zero-latency experience.
 
-## 📸 Screenshots
+## Screenshots
 
 <p align="center">
   <img src="docs/assets/screenshot_1.jpeg" width="30%" alt="NetCast Screenshot 1" />
@@ -16,7 +16,7 @@ My physical LG TV remote waved its final goodbyes, so I engineered an ad-free, h
   <img src="docs/assets/screenshot_5.jpeg" width="30%" alt="NetCast Screenshot 6" />
 </p>
 
-## ✨ Features
+## Features
 
 * **Cross-Platform Control:** Fully functional on both iOS and Android.
 * **Magic Trackpad Integration:** Uses custom gesture tracking (`PanResponder`) with throttled coordinate mapping to replicate the TV's native pointer functionality.
@@ -25,7 +25,7 @@ My physical LG TV remote waved its final goodbyes, so I engineered an ad-free, h
 * **Zero-Config Sessions:** Securely caches the TV's IP, Session ID, and PIN via `AsyncStorage`, instantly executing silent handshakes when the app returns from the background.
 * **Bulletproof Inputs:** Built-in IPv4 regex validation prevents malformed network requests before they execute.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Android Installation
 1. Go to [Releases](https://github.com/nihvp/NetCastApp/releases).
@@ -52,7 +52,7 @@ cd ..
 npx react-native run-ios
 ```
 
-## 🛠️ Tech Stack & Architecture
+## Tech Stack & Architecture
 * Framework: React Native
 
 * Networking: Standard fetch API for raw XML HTTP POST requests (ROAP API)
