@@ -99,6 +99,7 @@ document.getElementById('btn-disconnect').addEventListener('click', () => {
   localStorage.removeItem('tv_session');
   authScreen.classList.remove('hidden');
   remoteScreen.classList.add('hidden');
+  appSettingsModal.classList.add('hidden');
 });
 
 function showRemote() {
@@ -109,11 +110,13 @@ function showRemote() {
 // --- Remote Control ---
 document.querySelectorAll('.remote-btn').forEach(btn => {
   btn.addEventListener('click', async (e) => {
-    const key = e.target.getAttribute('data-key');
+    const key = e.target.getAttribute('data-key') || btn.getAttribute('data-key');
     if (!key || !currentSession) return;
     
     // Haptic feedback if supported by browser
-    if (navigator.vibrate) navigator.vibrate(50);
+    if (typeof hapticsEnabled !== 'undefined' && hapticsEnabled && navigator.vibrate) {
+      navigator.vibrate(50);
+    }
 
     const xml = `<?xml version="1.0" encoding="utf-8"?><command><session>${currentSession}</session><type>HandleKeyInput</type><value>${key}</value></command>`;
     try {
@@ -145,6 +148,15 @@ if (scrollContainer && dots.length > 0) {
 // --- Modals ---
 const numpadModal = document.getElementById('numpad-modal');
 const trackpadModal = document.getElementById('trackpad-modal');
+const appSettingsModal = document.getElementById('app-settings-modal');
+
+document.getElementById('btn-show-app-settings').addEventListener('click', () => {
+  document.getElementById('settings-tv-ip').textContent = currentIp || 'Not connected';
+  appSettingsModal.classList.remove('hidden');
+});
+document.getElementById('btn-close-app-settings').addEventListener('click', () => {
+  appSettingsModal.classList.add('hidden');
+});
 
 document.getElementById('btn-show-numpad').addEventListener('click', () => {
   numpadModal.classList.remove('hidden');
@@ -161,10 +173,15 @@ document.getElementById('btn-close-trackpad').addEventListener('click', () => {
 });
 
 // Close modals when clicking backdrop
-[numpadModal, trackpadModal].forEach(modal => {
+[numpadModal, trackpadModal, appSettingsModal].forEach(modal => {
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.classList.add('hidden');
   });
+});
+
+let hapticsEnabled = true;
+document.getElementById('toggle-haptics').addEventListener('change', (e) => {
+  hapticsEnabled = e.target.checked;
 });
 
 // --- Trackpad Logic ---
