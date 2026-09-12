@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>NetCast Remote</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/logo.png?v=2">
+  <link rel="shortcut icon" href="assets/logo.png?v=2">
+  <link rel="apple-touch-icon" href="assets/logo.png?v=2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
   <div id="app">
@@ -33,9 +38,9 @@
     <!-- Remote Screen -->
     <div id="remote-screen" class="screen hidden" style="padding: 0;">
       
-      <div class="header" style="padding: 24px 24px 0 24px; margin-bottom: 0;">
-        <h2>TV Connected</h2>
-        <button id="btn-disconnect" class="btn small" style="width: auto; padding: 6px 12px; font-size: 13px;">Disconnect</button>
+      <div class="header" style="position: relative; display: flex; justify-content: center; align-items: center; padding: 24px 24px 0 24px; margin-bottom: 0;">
+        <h2>NetCast Remote</h2>
+        <button id="btn-show-app-settings" class="btn small" style="position: absolute; right: 24px; width: 40px; height: 40px; padding: 0; border-radius: 20px;"><i data-lucide="settings"></i></button>
       </div>
 
       <div class="scroll-container">
@@ -61,32 +66,30 @@
             <div class="rocker-row">
               <!-- Vol Rocker -->
               <div class="rocker">
-                <button class="btn remote-btn rocker-half" data-key="24">Vol +</button>
-                <div class="rocker-divider"></div>
-                <button class="btn remote-btn rocker-half" data-key="25">Vol -</button>
+                <button class="btn rocker-half" data-key="24">Vol +</button>
+                <button class="btn rocker-half" data-key="25">Vol -</button>
               </div>
               
               <!-- Center Column -->
               <div class="center-col">
-                <button class="btn remote-btn" data-key="21" style="height: 60px; border-radius: var(--radius-full);">Home</button>
-                <button class="btn remote-btn" data-key="23" style="height: 60px; border-radius: var(--radius-full);">Back</button>
+                <button class="btn remote-btn" data-key="21">Home</button>
+                <button class="btn remote-btn" data-key="23">Back</button>
               </div>
 
               <!-- Ch Rocker -->
               <div class="rocker">
-                <button class="btn remote-btn rocker-half" data-key="27">Ch +</button>
-                <div class="rocker-divider"></div>
-                <button class="btn remote-btn rocker-half" data-key="28">Ch -</button>
+                <button class="btn rocker-half" data-key="27">Ch +</button>
+                <button class="btn rocker-half" data-key="28">Ch -</button>
               </div>
             </div>
 
             <div class="remote-row">
-              <button class="btn remote-btn" data-key="22"><i data-lucide="settings"></i> Settings</button>
+              <button class="btn remote-btn" data-key="22">Settings</button>
               <button class="btn remote-btn" data-key="47">Input</button>
             </div>
 
-            <div style="margin-top: 16px;">
-              <button id="btn-show-numpad" class="btn primary">Open Numpad</button>
+            <div style="margin-top: 16px; width: 100%;">
+              <button id="btn-show-numpad" class="btn primary pill">Open Numpad</button>
             </div>
 
             <p style="margin-top: 24px; font-size: 13px; opacity: 0.5;">Swipe left for more controls &rarr;</p>
@@ -108,13 +111,23 @@
             </div>
 
             <div class="color-grid" style="margin-bottom: 40px;">
-              <button class="btn remote-btn color-btn" style="background: var(--danger)" data-key="31"></button>
-              <button class="btn remote-btn color-btn" style="background: #34c759" data-key="30"></button>
-              <button class="btn remote-btn color-btn" style="background: #ffcc00" data-key="32"></button>
-              <button class="btn remote-btn color-btn" style="background: var(--accent)" data-key="29"></button>
+              <button class="btn remote-btn color-btn" style="background: var(--danger)" data-key="31">
+                <div class="color-dot"></div>
+              </button>
+              <button class="btn remote-btn color-btn" style="background: #34c759" data-key="30">
+                <div class="color-dot"></div><div class="color-dot"></div>
+              </button>
+              <button class="btn remote-btn color-btn" style="background: #ffcc00" data-key="32">
+                <div class="color-dot"></div><div class="color-dot"></div><div class="color-dot"></div>
+              </button>
+              <button class="btn remote-btn color-btn" style="background: var(--accent)" data-key="29">
+                <div class="color-dot"></div><div class="color-dot"></div><div class="color-dot"></div><div class="color-dot"></div>
+              </button>
             </div>
 
-            <button id="btn-show-trackpad" class="btn primary">Open Trackpad</button>
+            <div style="width: 100%;">
+              <button id="btn-show-trackpad" class="btn primary pill">Open Trackpad</button>
+            </div>
           </div>
         </div>
 
@@ -123,6 +136,32 @@
       <div class="pagination">
         <div class="dot active"></div>
         <div class="dot"></div>
+      </div>
+    </div>
+    
+    <!-- App Settings Modal -->
+    <div id="app-settings-modal" class="modal hidden">
+      <div class="modal-content" style="height: auto; max-height: 50vh; border-top-left-radius: 20px; border-top-right-radius: 20px; padding-bottom: 40px;">
+        <div class="header">
+          <h2>App Settings</h2>
+          <button id="btn-close-app-settings" class="btn small">Close</button>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 16px; font-weight: 500;">TV IP</span>
+            <span id="settings-tv-ip" style="font-size: 16px; color: var(--text-secondary);">Not connected</span>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 16px; font-weight: 500;">Haptic Feedback</span>
+            <input type="checkbox" id="toggle-haptics" checked style="width: auto; height: 24px; margin: 0; box-shadow: none;">
+          </div>
+          
+          <div style="height: 1px; background: var(--text-secondary); opacity: 0.2; margin: 8px 0;"></div>
+          
+          <button id="btn-disconnect" class="btn" style="color: var(--danger); font-weight: 600;">Disconnect TV</button>
+        </div>
       </div>
     </div>
 
