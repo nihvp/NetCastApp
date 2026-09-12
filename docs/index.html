@@ -321,13 +321,13 @@
 <body>
     <main class="container">
         <header>
-            <h1>NetCastApp</h1>
-            <p class="subtitle">My LG TV remote waved its final goodbyes, so I engineered an ad-free, hardware-mimicking alternative built on React Native.</p>
+            <h1>NetCast</h1>
+            <p class="subtitle">When my TV remote finally died, I refused to download a spammy, ad-filled replacement. So, I built a fast, clean, open-source alternative.</p>
             
             <div class="button-group">
                 <a href="https://github.com/nihvp/NetCastApp/releases" class="btn btn-primary">
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                    Download APK
+                    Download for Android
                 </a>
                 <a href="https://github.com/nihvp/NetCastApp" class="btn btn-secondary">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.161 22 16.418 22 12c0-5.523-4.477-10-10-10z"></path></svg>
@@ -336,12 +336,10 @@
             </div>
 
             <div class="tags">
-                <span class="tag">React Native</span>
-                <span class="tag">ROAP Protocol</span>
-                <span class="tag">UDP Networking</span>
-                <span class="tag">XML Payloads</span>
-                <span class="tag">PanResponder</span>
-                <span class="tag">AsyncStorage</span>
+                <span class="tag">iOS & Android</span>
+                <span class="tag">Web Browser</span>
+                <span class="tag">Zero Ads</span>
+                <span class="tag">Open Source</span>
             </div>
         </header>
 
@@ -369,55 +367,46 @@
         <section class="grid">
             <div class="card">
                 <h3>🖱️ Magic Trackpad</h3>
-                <p>Uses custom gesture tracking with throttled coordinate mapping to perfectly replicate the TV's native pointer functionality.</p>
+                <p>Swipe and tap just like the real thing. It perfectly mimics the TV's magic pointer so you can navigate menus with ease.</p>
             </div>
             <div class="card">
-                <h3>📳 Hardware-Like UX</h3>
-                <p>Integrates tactile haptic feedback and authentic, accessibility-standard UI design (including geometric dot patterns for colorblind users).</p>
+                <h3>📳 Feels Like the Real Thing</h3>
+                <p>Every button press gives a satisfying haptic vibration. We even added thoughtful accessibility touches, like geometric dots for colorblind users.</p>
             </div>
             <div class="card">
-                <h3>⚡ Zero-Config Sessions</h3>
-                <p>Securely caches the TV's IP, Session ID, and PIN via AsyncStorage, instantly executing silent handshakes when the app returns from the background.</p>
+                <h3>⚡ Pair Once and Forget</h3>
+                <p>The app remembers your TV securely. Just open the app and it silently reconnects in the background instantly.</p>
             </div>
             <div class="card">
-                <h3>🛡️ Bulletproof Inputs</h3>
-                <p>Built-in IPv4 regex validation prevents malformed network requests before they ever execute.</p>
+                <h3>🛡️ Fast & Private</h3>
+                <p>By talking directly to your TV over your local network, button presses are instant and your data never leaves your house.</p>
             </div>
             <div class="card">
-                <h3>📡 Network Stability</h3>
-                <p>Implements custom input throttling to prevent packet loss or TV processor crashes during rapid button presses.</p>
+                <h3>📱 Play Anywhere</h3>
+                <p>Use it on your iPhone, Android, or spin up the proxy server to control your TV from any web browser in the house.</p>
             </div>
             <div class="card">
-                <h3>📱 Cross-Platform</h3>
-                <p>Communicates directly with the TV over the local network using the ROAP protocol, providing a zero-latency experience on iOS and Android.</p>
+                <h3>🚫 Zero Ads or Spam</h3>
+                <p>Built to solve a problem, not sell your data. No tracking scripts, no telemetry, and definitely no pop-up ads.</p>
             </div>
         </section>
 
         <section>
-            <h2>Installation</h2>
+            <h2>How to get it</h2>
             <div class="grid" style="margin-bottom: 5rem;">
                 <div class="card">
                     <h3>Android</h3>
-                    <p>Grab the latest <code>NetCastApp.apk</code> file from the <a href="https://github.com/nihvp/NetCastApp/releases">releases page</a> and install it directly on your device (ensure "Install from unknown sources" is enabled).</p>
+                    <p>Grab the latest <code>NetCastApp.apk</code> file from the <a href="https://github.com/nihvp/NetCastApp/releases">releases page</a> and install it directly on your phone.</p>
                 </div>
                 
                 <div class="card">
+                    <h3>Web Browser (Self-Hosted)</h3>
+                    <p>Don't want an app? You can run NetCast in any browser by spinning up our lightweight proxy server. Just navigate to the <code>webapp</code> folder in the source code, run <code>npm install</code> then <code>npm start</code>, and visit <code>localhost:3000</code>!</p>
+                </div>
+
+                <div class="card">
                     <h3>iOS</h3>
-                    <p>Due to App Store restriction you will need to build locally. To run the project locally on an iPhone or the iOS Simulator, ensure your React Native environment (Node, Watchman, Ruby, Xcode) is configured on a mac computer:</p>
-                    <pre><code># Clone the repository
-git clone https://github.com/nihvp/NetCastApp.git
-cd NetCastApp
-
-# Install JavaScript dependencies
-npm install
-
-# Install Native iOS bridging files
-cd ios
-pod install
-cd ..
-
-# Launch the app
-npx react-native run-ios</code></pre>
+                    <p>Because of Apple's App Store rules, you'll need to build the app yourself using a Mac with Xcode and React Native installed. Check the GitHub Readme for the quick build commands.</p>
                 </div>
             </div>
         </section>
@@ -426,18 +415,18 @@ npx react-native run-ios</code></pre>
             <h2>Frequently Asked Questions</h2>
             
             <details open>
-                <summary>Does this work with older LG TVs?</summary>
-                <p>NetCastApp relies on the Remote Office Action Protocol (ROAP). If your Smart TV was made before 2014 and connects to WiFi, it should work seamlessly.</p>
+                <summary>Will this work with my TV?</summary>
+                <p>NetCast uses the LG ROAP protocol. Generally, if your LG Smart TV was made before 2014 (NetCast era) and connects to WiFi, it should work perfectly!</p>
             </details>
 
             <details open>
-                <summary>Why do I need to enter a PIN?</summary>
-                <p>This is a standard security handshake required by the TV to ensure only authorized local network clients can control it via XML payloads.</p>
+                <summary>Why is it asking for a PIN?</summary>
+                <p>It's just a one-time security check from the TV to make sure your phone is actually allowed to control it on your home network.</p>
             </details>
 
             <details open>
-                <summary>Is it really ad-free?</summary>
-                <p>Yes. The application is completely open-source and free of ads, tracking scripts, telemetry, and paywalls.</p>
+                <summary>Is it really free?</summary>
+                <p>Yes. 100% free forever. It's an open-source hobby project.</p>
             </details>
         </section>
 

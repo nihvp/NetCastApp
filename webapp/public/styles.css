@@ -1,0 +1,448 @@
+:root {
+  /* Apple iOS Light Theme */
+  --bg-color: #F2F2F7;
+  --text-primary: #000000;
+  --text-secondary: #8E8E93;
+  
+  --surface: #FFFFFF;
+  --surface-active: #E5E5EA;
+  
+  --dpad-surface: #E5E5EA;
+  --dpad-active: #D1D1D6;
+  --dpad-center: #FFFFFF;
+  
+  --accent: #007AFF;
+  --danger: #FF3B30;
+  
+  --radius-sm: 14px;
+  --radius-md: 18px;
+  --radius-lg: 32px;
+  --radius-full: 9999px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Apple iOS Dark Theme */
+    --bg-color: #000000;
+    --text-primary: #FFFFFF;
+    --text-secondary: #EBEBF599;
+    
+    --surface: #1C1C1E;
+    --surface-active: #2C2C2E;
+    
+    --dpad-surface: #1C1C1E;
+    --dpad-active: #2C2C2E;
+    --dpad-center: #2C2C2E;
+    
+    --accent: #0A84FF;
+    --danger: #FF453A;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  touch-action: pan-y pinch-zoom;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  overflow-x: hidden;
+}
+
+#app {
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  animation: fadeIn 0.2s ease-out;
+}
+
+#auth-screen {
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hidden {
+  display: none !important;
+}
+
+h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.36px;
+  margin-bottom: 8px;
+}
+
+h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+p {
+  color: var(--text-secondary);
+  font-size: 15px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Inputs & Auth */
+input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 17px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+}
+
+input:focus {
+  outline: none;
+  background: var(--surface-active);
+}
+
+/* General Buttons */
+.btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.1s, background-color 0.1s;
+}
+
+.btn:active {
+  background: var(--surface-active);
+  transform: scale(0.96);
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn.primary:active {
+  background: var(--accent);
+  opacity: 0.8;
+}
+
+.btn.small {
+  width: auto;
+  padding: 8px 16px;
+  font-size: 15px;
+  border-radius: var(--radius-full);
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+/* Remote Row (Power, Settings) */
+.remote-row {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.remote-row .btn {
+  flex: 1;
+  height: 60px;
+}
+
+.remote-row .power {
+  color: var(--danger);
+}
+.remote-row .power svg {
+  stroke: var(--danger);
+}
+
+.remote-row .large {
+  height: 80px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* The D-Pad - Apple TV Style Ring */
+.dpad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  background: var(--dpad-surface);
+  border-radius: 50%;
+  width: 280px;
+  height: 280px;
+  position: relative;
+}
+
+.dpad .btn {
+  position: absolute;
+  background: transparent;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0;
+}
+
+.dpad .btn:active {
+  background: var(--dpad-active);
+}
+
+.dpad .up { top: 0; }
+.dpad .down { bottom: 0; }
+.dpad .left { left: 0; }
+.dpad .right { right: 0; }
+
+.dpad-middle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.dpad .btn.ok {
+  background: var(--dpad-center);
+  width: 90px;
+  height: 90px;
+  border-radius: 45px;
+  position: relative;
+  font-weight: 600;
+}
+.dpad .btn.ok:active {
+  background: var(--dpad-active);
+}
+
+/* Rocker Row */
+.rocker-row {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  margin: 16px 0;
+  margin-bottom: 32px;
+}
+
+.rocker {
+  display: flex;
+  flex-direction: column;
+  width: 70px;
+  height: 140px;
+  border-radius: 35px;
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.rocker-half {
+  flex: 1;
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  font-weight: 600;
+}
+
+.rocker-half:active {
+  background: var(--surface-active);
+}
+
+.rocker-divider {
+  height: 1px;
+  background: var(--text-secondary);
+  opacity: 0.2;
+  width: 60%;
+  align-self: center;
+}
+
+.center-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 80px;
+}
+
+/* Color Buttons */
+.color-grid {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  justify-content: center;
+}
+
+.color-btn {
+  flex: 1;
+  height: 44px;
+  border-radius: var(--radius-full);
+}
+.color-btn:active {
+  transform: scale(0.92);
+}
+
+
+/* Horizontal Scroll Container */
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  width: 100vw;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+.scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome */
+}
+
+.page {
+  flex: 0 0 100vw;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.page-content {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+/* Pagination Dots */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 0;
+  width: 100%;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--text-secondary);
+  opacity: 0.3;
+  transition: opacity 0.2s;
+}
+
+.dot.active {
+  opacity: 1;
+}
+
+/* Modals */
+.modal {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 100;
+  animation: fadeBg 0.2s ease-out;
+}
+
+@keyframes fadeBg {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  width: 100%;
+  height: 85vh;
+  background: var(--bg-color);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* Numpad */
+.numpad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.num-btn {
+  height: 64px;
+  border-radius: var(--radius-sm);
+  font-size: 24px;
+  font-weight: 400;
+  background: var(--surface);
+}
+
+.num-btn.close-btn {
+  background: transparent;
+}
+
+/* Trackpad */
+.trackpad-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.trackpad-surface {
+  flex: 1;
+  background: var(--surface);
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  touch-action: none;
+}
+
+.trackpad-surface p {
+  opacity: 0.4;
+  margin: 0;
+  font-weight: 500;
+}
