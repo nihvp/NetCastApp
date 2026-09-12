@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>NetCast Remote</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Auth Screen -->
+    <div id="auth-screen" class="screen">
+      <h1>NetCast TV Remote</h1>
+      
+      <div id="discovery-section" style="width: 100%; margin-top: 40px;">
+        <button id="btn-discover" class="btn primary">Scan Network</button>
+        <p id="discovery-status" style="margin-top: 16px;"></p>
+      </div>
+
+      <div id="manual-ip-section" style="width: 100%; margin-top: 20px;">
+        <p style="margin-bottom: 8px;">Or connect manually</p>
+        <input type="text" id="tv-ip" placeholder="192.168.x.x">
+        <button id="btn-request-pin" class="btn">Connect</button>
+      </div>
+
+      <div id="pin-section" class="hidden" style="width: 100%; margin-top: 30px;">
+        <p style="margin-bottom: 8px;">Enter PIN shown on TV</p>
+        <input type="text" id="tv-pin" placeholder="PIN Code">
+        <button id="btn-pair" class="btn primary">Pair Device</button>
+      </div>
+    </div>
+
+    <!-- Remote Screen -->
+    <div id="remote-screen" class="screen hidden" style="padding: 0;">
+      
+      <div class="header" style="padding: 24px 24px 0 24px; margin-bottom: 0;">
+        <h2>TV Connected</h2>
+        <button id="btn-disconnect" class="btn small" style="width: auto; padding: 6px 12px; font-size: 13px;">Disconnect</button>
+      </div>
+
+      <div class="scroll-container">
+        <!-- Page 1: Main -->
+        <div class="page">
+          <div class="page-content">
+            
+            <div class="remote-row">
+              <button class="btn remote-btn power" data-key="1"><i data-lucide="power"></i> Power</button>
+              <button class="btn remote-btn" data-key="26">Mute</button>
+            </div>
+
+            <div class="dpad">
+              <button class="btn remote-btn up" data-key="12"><i data-lucide="chevron-up"></i></button>
+              <div class="dpad-middle">
+                <button class="btn remote-btn left" data-key="14"><i data-lucide="chevron-left"></i></button>
+                <button class="btn remote-btn ok" data-key="20">OK</button>
+                <button class="btn remote-btn right" data-key="15"><i data-lucide="chevron-right"></i></button>
+              </div>
+              <button class="btn remote-btn down" data-key="13"><i data-lucide="chevron-down"></i></button>
+            </div>
+            
+            <div class="rocker-row">
+              <!-- Vol Rocker -->
+              <div class="rocker">
+                <button class="btn remote-btn rocker-half" data-key="24">Vol +</button>
+                <div class="rocker-divider"></div>
+                <button class="btn remote-btn rocker-half" data-key="25">Vol -</button>
+              </div>
+              
+              <!-- Center Column -->
+              <div class="center-col">
+                <button class="btn remote-btn" data-key="21" style="height: 60px; border-radius: var(--radius-full);">Home</button>
+                <button class="btn remote-btn" data-key="23" style="height: 60px; border-radius: var(--radius-full);">Back</button>
+              </div>
+
+              <!-- Ch Rocker -->
+              <div class="rocker">
+                <button class="btn remote-btn rocker-half" data-key="27">Ch +</button>
+                <div class="rocker-divider"></div>
+                <button class="btn remote-btn rocker-half" data-key="28">Ch -</button>
+              </div>
+            </div>
+
+            <div class="remote-row">
+              <button class="btn remote-btn" data-key="22"><i data-lucide="settings"></i> Settings</button>
+              <button class="btn remote-btn" data-key="47">Input</button>
+            </div>
+
+            <div style="margin-top: 16px;">
+              <button id="btn-show-numpad" class="btn primary">Open Numpad</button>
+            </div>
+
+            <p style="margin-top: 24px; font-size: 13px; opacity: 0.5;">Swipe left for more controls &rarr;</p>
+          </div>
+        </div>
+
+        <!-- Page 2: Extras -->
+        <div class="page">
+          <div class="page-content" style="justify-content: center; padding-bottom: 60px;">
+            
+            <div class="remote-row" style="margin-bottom: 12px;">
+              <button class="btn remote-btn large" data-key="417">APPS</button>
+              <button class="btn remote-btn large" data-key="412">EXIT</button>
+            </div>
+            
+            <div class="remote-row" style="margin-bottom: 40px;">
+              <button class="btn remote-btn large" data-key="45">INFO</button>
+              <button class="btn remote-btn large" data-key="411">SEARCH</button>
+            </div>
+
+            <div class="color-grid" style="margin-bottom: 40px;">
+              <button class="btn remote-btn color-btn" style="background: var(--danger)" data-key="31"></button>
+              <button class="btn remote-btn color-btn" style="background: #34c759" data-key="30"></button>
+              <button class="btn remote-btn color-btn" style="background: #ffcc00" data-key="32"></button>
+              <button class="btn remote-btn color-btn" style="background: var(--accent)" data-key="29"></button>
+            </div>
+
+            <button id="btn-show-trackpad" class="btn primary">Open Trackpad</button>
+          </div>
+        </div>
+
+      </div>
+      
+      <div class="pagination">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <!-- Numpad Modal -->
+    <div id="numpad-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="header">
+          <h2>Numpad</h2>
+          <button id="btn-close-numpad" class="btn small">Close</button>
+        </div>
+        <div class="numpad-grid">
+          <button class="btn remote-btn num-btn" data-key="3">1</button>
+          <button class="btn remote-btn num-btn" data-key="4">2</button>
+          <button class="btn remote-btn num-btn" data-key="5">3</button>
+          <button class="btn remote-btn num-btn" data-key="6">4</button>
+          <button class="btn remote-btn num-btn" data-key="7">5</button>
+          <button class="btn remote-btn num-btn" data-key="8">6</button>
+          <button class="btn remote-btn num-btn" data-key="9">7</button>
+          <button class="btn remote-btn num-btn" data-key="10">8</button>
+          <button class="btn remote-btn num-btn" data-key="11">9</button>
+          <div class="empty"></div>
+          <button class="btn remote-btn num-btn" data-key="2">0</button>
+          <div class="empty"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trackpad Modal -->
+    <div id="trackpad-modal" class="modal hidden">
+      <div class="modal-content trackpad-container">
+        <div class="header" style="margin-bottom: 20px;">
+          <h2>Magic Trackpad</h2>
+          <button id="btn-close-trackpad" class="btn small">Close</button>
+        </div>
+        <div id="trackpad-surface" class="trackpad-surface">
+          <p>Drag to move<br>Tap to click</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="app.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

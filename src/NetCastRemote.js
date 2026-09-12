@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, Modal, Button, useColorScheme, Switch, Pressable, ScrollView, Dimensions, PanResponder } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Modal, Button, useColorScheme, Switch, Pressable, ScrollView, useWindowDimensions, PanResponder } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import { Settings } from 'lucide-react-native';
 import { useThrottle } from './useThrottle';
 
-const { width: screenWidth } = Dimensions.get('window');
 const hapticOptions = { enableVibrateFallback: true, ignoreAndroidSystemSettings: false };
 
 const KEYS = {
@@ -24,6 +24,7 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
 
   const isDark = useColorScheme() === 'dark';
+  const { width: screenWidth } = useWindowDimensions();
   const theme = isDark ? darkStyles : lightStyles;
 
   // Standard Button Command
@@ -118,26 +119,24 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
       <View style={theme.headerRow}>
         <Text style={theme.header}>NetCast Remote</Text>
         <TouchableOpacity onPress={() => setShowSettings(true)} style={theme.settingsBtn}>
-          <Text style={theme.settingsIcon}>⚙️</Text>
+          <Settings color={isDark ? '#FFF' : '#000'} size={24} />
         </TouchableOpacity>
       </View>
 
       <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={{ flex: 1, width: '100%' }} contentContainerStyle={{ flexGrow: 1 }}>
         {/* PAGE 1: Original Remote */}
-        <View style={theme.page}>
+        <View style={[theme.page, { width: screenWidth }]}>
           <View style={theme.row}>
             <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.POWER)}><Text style={theme.text}>POWER</Text></TouchableOpacity>
             <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.MUTE)}><Text style={theme.text}>MUTE</Text></TouchableOpacity>
           </View>
 
-          <View style={theme.dpad}>
-            <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.UP)}><Text style={theme.text}>UP</Text></TouchableOpacity>
-            <View style={theme.row}>
-              <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.LEFT)}><Text style={theme.text}>LEFT</Text></TouchableOpacity>
-              <TouchableOpacity style={[theme.btn, theme.okBtn]} onPress={() => handlePress(KEYS.OK)}><Text style={theme.text}>OK</Text></TouchableOpacity>
-              <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.RIGHT)}><Text style={theme.text}>RIGHT</Text></TouchableOpacity>
-            </View>
-            <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.DOWN)}><Text style={theme.text}>DOWN</Text></TouchableOpacity>
+          <View style={[theme.dpad, isDark ? { backgroundColor: '#1C1C1E' } : { backgroundColor: '#E5E5EA' }]}>
+            <TouchableOpacity style={[theme.dpadRingBtn, { top: 0 }]} onPress={() => handlePress(KEYS.UP)}><Text style={theme.text}>UP</Text></TouchableOpacity>
+            <TouchableOpacity style={[theme.dpadRingBtn, { bottom: 0 }]} onPress={() => handlePress(KEYS.DOWN)}><Text style={theme.text}>DOWN</Text></TouchableOpacity>
+            <TouchableOpacity style={[theme.dpadRingBtn, { left: 0 }]} onPress={() => handlePress(KEYS.LEFT)}><Text style={theme.text}>LEFT</Text></TouchableOpacity>
+            <TouchableOpacity style={[theme.dpadRingBtn, { right: 0 }]} onPress={() => handlePress(KEYS.RIGHT)}><Text style={theme.text}>RIGHT</Text></TouchableOpacity>
+            <TouchableOpacity style={[theme.dpadOkBtn, isDark ? { backgroundColor: '#2C2C2E' } : { backgroundColor: '#FFFFFF' }]} onPress={() => handlePress(KEYS.OK)}><Text style={[theme.text, { fontWeight: 'bold' }]}>OK</Text></TouchableOpacity>
           </View>
 
           <View style={[theme.row, { width: '90%', justifyContent: 'space-around', marginVertical: 15 }]}>
@@ -172,7 +171,7 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
         </View>
 
         {/* PAGE 2: Extra Buttons & Trackpad */}
-        <View style={theme.page}>
+        <View style={[theme.page, { width: screenWidth }]}>
           
           <View style={theme.extraGrid}>
             <TouchableOpacity style={theme.largeBtn} onPress={() => handlePress(KEYS.APPS)}><Text style={theme.text}>APPS</Text></TouchableOpacity>
@@ -257,14 +256,38 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
 const baseStyles = {
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%', paddingHorizontal: 20, marginTop: 10, marginBottom: 10, position: 'relative' },
   settingsBtn: { position: 'absolute', right: 20, padding: 10 },
-  settingsIcon: { fontSize: 24 },
   
-  page: { width: screenWidth, flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 },
+  page: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 },
   swipeHint: { marginTop: 20, fontSize: 12, opacity: 0.5 },
 
   row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 10 },
   column: { flexDirection: 'column', alignItems: 'center' },
-  dpad: { alignItems: 'center', marginVertical: 20 },
+  
+  dpad: { 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginVertical: 20, 
+    width: 280, 
+    height: 280, 
+    borderRadius: 140, 
+    position: 'relative',
+    overflow: 'hidden'
+  },
+  dpadRingBtn: { 
+    position: 'absolute', 
+    width: 80, 
+    height: 80, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    borderRadius: 40 
+  },
+  dpadOkBtn: { 
+    width: 90, 
+    height: 90, 
+    borderRadius: 45, 
+    alignItems: 'center', 
+    justifyContent: 'center' 
+  },
   
   btn: { width: 85, height: 60, margin: 5, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
   
