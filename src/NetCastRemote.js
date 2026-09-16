@@ -1,5 +1,20 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, Modal, Button, useColorScheme, Switch, Pressable, ScrollView, useWindowDimensions, PanResponder } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  Modal,
+  Button,
+  useColorScheme,
+  Switch,
+  Pressable,
+  ScrollView,
+  useWindowDimensions,
+  PanResponder
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { Settings } from 'lucide-react-native';
 import { useThrottle } from './useThrottle';
@@ -24,8 +39,32 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
   const [hapticsEnabled, setHapticsEnabled] = useState(true);
 
   const isDark = useColorScheme() === 'dark';
-  const { width: screenWidth } = useWindowDimensions();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
   const theme = isDark ? darkStyles : lightStyles;
+
+  // Responsive layout calculations
+  const maxContentWidth = Math.min(screenWidth - 32, 400);
+  const availableHeight = screenHeight - insets.top - insets.bottom - 50;
+
+  // Adaptive component sizing based on available viewport height
+  const isCompact = availableHeight < 650;
+  const isTall = availableHeight >= 780;
+
+  const dpadSize = Math.round(
+    Math.min(maxContentWidth * 0.70, Math.max(190, availableHeight * (isCompact ? 0.30 : 0.33)), isTall ? 260 : 235)
+  );
+  const dpadRingBtnSize = Math.round(dpadSize * 0.28);
+  const dpadOkBtnSize = Math.round(dpadSize * 0.33);
+
+  const btnWidth = Math.min(Math.round(maxContentWidth * 0.23), 88);
+  const btnHeight = isCompact ? 46 : (isTall ? 58 : 52);
+
+  const rockerWidth = Math.min(Math.round(maxContentWidth * 0.19), 72);
+  const rockerHeight = isCompact ? 112 : (isTall ? 138 : 124);
+
+  const rowMargin = isCompact ? 5 : (isTall ? 10 : 8);
+  const dpadMargin = isCompact ? 8 : (isTall ? 14 : 10);
 
   // Standard Button Command
   const sendCommand = async (keyCode) => {
@@ -115,94 +154,339 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
   };
 
   return (
-    <View style={theme.container}>
-      <View style={theme.headerRow}>
+    <View
+      style={[
+        theme.container,
+        {
+          paddingTop: Math.max(insets.top, 10),
+          paddingBottom: Math.max(insets.bottom, 10)
+        }
+      ]}
+    >
+      {/* Header */}
+      <View style={[theme.headerRow, { width: Math.min(screenWidth, 440), alignSelf: 'center' }]}>
         <Text style={theme.header}>NetCast Remote</Text>
-        <TouchableOpacity onPress={() => setShowSettings(true)} style={theme.settingsBtn}>
-          <Settings color={isDark ? '#FFF' : '#000'} size={24} />
+        <TouchableOpacity
+          onPress={() => setShowSettings(true)}
+          style={theme.settingsBtn}
+          activeOpacity={0.7}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          <Settings color={isDark ? '#FFF' : '#000'} size={22} />
         </TouchableOpacity>
       </View>
 
-      <ScrollView horizontal pagingEnabled showsHorizontalScrollIndicator={false} style={{ flex: 1, width: '100%' }} contentContainerStyle={{ flexGrow: 1 }}>
+      {/* Main Horizontal Swipe Pages */}
+      <ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        style={{ flex: 1, width: '100%' }}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
         {/* PAGE 1: Original Remote */}
-        <View style={[theme.page, { width: screenWidth }]}>
-          <View style={theme.row}>
-            <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.POWER)}><Text style={theme.text}>POWER</Text></TouchableOpacity>
-            <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.MUTE)}><Text style={theme.text}>MUTE</Text></TouchableOpacity>
-          </View>
-
-          <View style={[theme.dpad, isDark ? { backgroundColor: '#1C1C1E' } : { backgroundColor: '#E5E5EA' }]}>
-            <TouchableOpacity style={[theme.dpadRingBtn, { top: 0 }]} onPress={() => handlePress(KEYS.UP)}><Text style={theme.text}>UP</Text></TouchableOpacity>
-            <TouchableOpacity style={[theme.dpadRingBtn, { bottom: 0 }]} onPress={() => handlePress(KEYS.DOWN)}><Text style={theme.text}>DOWN</Text></TouchableOpacity>
-            <TouchableOpacity style={[theme.dpadRingBtn, { left: 0 }]} onPress={() => handlePress(KEYS.LEFT)}><Text style={theme.text}>LEFT</Text></TouchableOpacity>
-            <TouchableOpacity style={[theme.dpadRingBtn, { right: 0 }]} onPress={() => handlePress(KEYS.RIGHT)}><Text style={theme.text}>RIGHT</Text></TouchableOpacity>
-            <TouchableOpacity style={[theme.dpadOkBtn, isDark ? { backgroundColor: '#2C2C2E' } : { backgroundColor: '#FFFFFF' }]} onPress={() => handlePress(KEYS.OK)}><Text style={[theme.text, { fontWeight: 'bold' }]}>OK</Text></TouchableOpacity>
-          </View>
-
-          <View style={[theme.row, { width: '90%', justifyContent: 'space-around', marginVertical: 15 }]}>
-            <View style={theme.rocker}>
-              <TouchableOpacity style={theme.rockerHalf} onPress={() => handlePress(KEYS.VOL_UP)}><Text style={theme.text}>VOL +</Text></TouchableOpacity>
-              <View style={theme.rockerDivider} />
-              <TouchableOpacity style={theme.rockerHalf} onPress={() => handlePress(KEYS.VOL_DOWN)}><Text style={theme.text}>VOL -</Text></TouchableOpacity>
+        <View style={[theme.pageWrapper, { width: screenWidth }]}>
+          <ScrollView
+            style={{ width: '100%' }}
+            contentContainerStyle={[
+              theme.pageContent,
+              {
+                width: maxContentWidth,
+                alignSelf: 'center',
+                flexGrow: 1,
+                justifyContent: 'space-evenly',
+                paddingVertical: 6
+              }
+            ]}
+            showsVerticalScrollIndicator={false}
+            bounces={false}
+          >
+            {/* POWER & MUTE ROW */}
+            <View style={[theme.row, { marginVertical: rowMargin }]}>
+              <TouchableOpacity
+                style={[theme.btn, { width: btnWidth, height: btnHeight }]}
+                onPress={() => handlePress(KEYS.POWER)}
+                activeOpacity={0.7}
+              >
+                <Text style={[theme.text, { color: '#FF3B30', fontWeight: '700' }]}>POWER</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[theme.btn, { width: btnWidth, height: btnHeight }]}
+                onPress={() => handlePress(KEYS.MUTE)}
+                activeOpacity={0.7}
+              >
+                <Text style={theme.text}>MUTE</Text>
+              </TouchableOpacity>
             </View>
-            
-            <View style={theme.column}>
-              <TouchableOpacity style={[theme.btn, { marginBottom: 15 }]} onPress={() => handlePress(KEYS.HOME)}><Text style={theme.text}>HOME</Text></TouchableOpacity>
-              <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.BACK)}><Text style={theme.text}>BACK</Text></TouchableOpacity>
+
+            {/* D-PAD */}
+            <View
+              style={[
+                theme.dpad,
+                {
+                  width: dpadSize,
+                  height: dpadSize,
+                  borderRadius: dpadSize / 2,
+                  marginVertical: dpadMargin,
+                  backgroundColor: isDark ? '#1C1C1E' : '#E5E5EA'
+                }
+              ]}
+            >
+              <TouchableOpacity
+                style={[
+                  theme.dpadRingBtn,
+                  { top: 0, width: dpadRingBtnSize, height: dpadRingBtnSize, borderRadius: dpadRingBtnSize / 2 }
+                ]}
+                onPress={() => handlePress(KEYS.UP)}
+                activeOpacity={0.6}
+              >
+                <Text style={theme.text}>UP</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  theme.dpadRingBtn,
+                  { bottom: 0, width: dpadRingBtnSize, height: dpadRingBtnSize, borderRadius: dpadRingBtnSize / 2 }
+                ]}
+                onPress={() => handlePress(KEYS.DOWN)}
+                activeOpacity={0.6}
+              >
+                <Text style={theme.text}>DOWN</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  theme.dpadRingBtn,
+                  { left: 0, width: dpadRingBtnSize, height: dpadRingBtnSize, borderRadius: dpadRingBtnSize / 2 }
+                ]}
+                onPress={() => handlePress(KEYS.LEFT)}
+                activeOpacity={0.6}
+              >
+                <Text style={theme.text}>LEFT</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  theme.dpadRingBtn,
+                  { right: 0, width: dpadRingBtnSize, height: dpadRingBtnSize, borderRadius: dpadRingBtnSize / 2 }
+                ]}
+                onPress={() => handlePress(KEYS.RIGHT)}
+                activeOpacity={0.6}
+              >
+                <Text style={theme.text}>RIGHT</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  theme.dpadOkBtn,
+                  {
+                    width: dpadOkBtnSize,
+                    height: dpadOkBtnSize,
+                    borderRadius: dpadOkBtnSize / 2,
+                    backgroundColor: isDark ? '#2C2C2E' : '#FFFFFF'
+                  }
+                ]}
+                onPress={() => handlePress(KEYS.OK)}
+                activeOpacity={0.7}
+              >
+                <Text style={[theme.text, { fontWeight: 'bold' }]}>OK</Text>
+              </TouchableOpacity>
             </View>
 
-            <View style={theme.rocker}>
-              <TouchableOpacity style={theme.rockerHalf} onPress={() => handlePress(KEYS.CH_UP)}><Text style={theme.text}>CH +</Text></TouchableOpacity>
-              <View style={theme.rockerDivider} />
-              <TouchableOpacity style={theme.rockerHalf} onPress={() => handlePress(KEYS.CH_DOWN)}><Text style={theme.text}>CH -</Text></TouchableOpacity>
+            {/* ROCKERS & CENTER CONTROLS */}
+            <View
+              style={[
+                theme.row,
+                { width: '95%', justifyContent: 'space-between', marginVertical: rowMargin }
+              ]}
+            >
+              {/* VOL ROCKER */}
+              <View style={[theme.rocker, { width: rockerWidth, height: rockerHeight, borderRadius: rockerWidth / 2 }]}>
+                <TouchableOpacity
+                  style={theme.rockerHalf}
+                  onPress={() => handlePress(KEYS.VOL_UP)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={theme.text}>VOL +</Text>
+                </TouchableOpacity>
+                <View style={theme.rockerDivider} />
+                <TouchableOpacity
+                  style={theme.rockerHalf}
+                  onPress={() => handlePress(KEYS.VOL_DOWN)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={theme.text}>VOL -</Text>
+                </TouchableOpacity>
+              </View>
+              
+              {/* CENTER BUTTONS */}
+              <View style={theme.column}>
+                <TouchableOpacity
+                  style={[theme.btn, { width: btnWidth, height: btnHeight, marginBottom: isCompact ? 8 : 12 }]}
+                  onPress={() => handlePress(KEYS.HOME)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={theme.text}>HOME</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[theme.btn, { width: btnWidth, height: btnHeight }]}
+                  onPress={() => handlePress(KEYS.BACK)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={theme.text}>BACK</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* CH ROCKER */}
+              <View style={[theme.rocker, { width: rockerWidth, height: rockerHeight, borderRadius: rockerWidth / 2 }]}>
+                <TouchableOpacity
+                  style={theme.rockerHalf}
+                  onPress={() => handlePress(KEYS.CH_UP)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={theme.text}>CH +</Text>
+                </TouchableOpacity>
+                <View style={theme.rockerDivider} />
+                <TouchableOpacity
+                  style={theme.rockerHalf}
+                  onPress={() => handlePress(KEYS.CH_DOWN)}
+                  activeOpacity={0.6}
+                >
+                  <Text style={theme.text}>CH -</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
 
-          <View style={theme.row}>
-            <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.SETTINGS)}><Text style={theme.text}>SETTINGS</Text></TouchableOpacity>
-            <TouchableOpacity style={theme.btn} onPress={() => handlePress(KEYS.INPUT)}><Text style={theme.text}>INPUT</Text></TouchableOpacity>
-          </View>
+            {/* SETTINGS & INPUT ROW */}
+            <View style={[theme.row, { marginVertical: rowMargin }]}>
+              <TouchableOpacity
+                style={[theme.btn, { width: btnWidth, height: btnHeight }]}
+                onPress={() => handlePress(KEYS.SETTINGS)}
+                activeOpacity={0.7}
+              >
+                <Text style={theme.text}>SETTINGS</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[theme.btn, { width: btnWidth, height: btnHeight }]}
+                onPress={() => handlePress(KEYS.INPUT)}
+                activeOpacity={0.7}
+              >
+                <Text style={theme.text}>INPUT</Text>
+              </TouchableOpacity>
+            </View>
 
-          <View style={{ marginTop: 15 }}>
-            <Button title="Open Numpad" color={isDark ? '#4DA8DA' : '#007AFF'} onPress={() => setShowKeypad(true)} />
-          </View>
+            {/* OPEN NUMPAD BUTTON */}
+            <View style={{ width: '85%', maxWidth: 260, marginVertical: rowMargin }}>
+              <TouchableOpacity
+                style={[theme.pillBtn, { height: btnHeight }]}
+                onPress={() => setShowKeypad(true)}
+                activeOpacity={0.7}
+              >
+                <Text style={theme.pillBtnText}>Open Numpad</Text>
+              </TouchableOpacity>
+            </View>
 
-          <Text style={theme.swipeHint}>Swipe left for more controls &rarr;</Text>
+            <Text style={theme.swipeHint}>Swipe left for more controls &rarr;</Text>
+          </ScrollView>
         </View>
 
         {/* PAGE 2: Extra Buttons & Trackpad */}
-        <View style={[theme.page, { width: screenWidth }]}>
-          
-          <View style={theme.extraGrid}>
-            <TouchableOpacity style={theme.largeBtn} onPress={() => handlePress(KEYS.APPS)}><Text style={theme.text}>APPS</Text></TouchableOpacity>
-            <TouchableOpacity style={theme.largeBtn} onPress={() => handlePress(KEYS.EXIT)}><Text style={theme.text}>EXIT</Text></TouchableOpacity>
-          </View>
-          
-          <View style={theme.extraGrid}>
-            <TouchableOpacity style={theme.largeBtn} onPress={() => handlePress(KEYS.INFO)}><Text style={theme.text}>INFO</Text></TouchableOpacity>
-            <TouchableOpacity style={theme.largeBtn} onPress={() => handlePress(KEYS.SEARCH)}><Text style={theme.text}>SEARCH</Text></TouchableOpacity>
-          </View>
+        <View style={[theme.pageWrapper, { width: screenWidth }]}>
+          <ScrollView
+            style={{ width: '100%' }}
+            contentContainerStyle={[
+              theme.pageContent,
+              {
+                width: maxContentWidth,
+                alignSelf: 'center',
+                flexGrow: 1,
+                justifyContent: 'space-evenly',
+                paddingVertical: 12
+              }
+            ]}
+            showsVerticalScrollIndicator={false}
+            bounces={false}
+          >
+            <View style={theme.extraGrid}>
+              <TouchableOpacity
+                style={[theme.largeBtn, { height: isCompact ? 60 : 75 }]}
+                onPress={() => handlePress(KEYS.APPS)}
+                activeOpacity={0.7}
+              >
+                <Text style={theme.text}>APPS</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[theme.largeBtn, { height: isCompact ? 60 : 75 }]}
+                onPress={() => handlePress(KEYS.EXIT)}
+                activeOpacity={0.7}
+              >
+                <Text style={theme.text}>EXIT</Text>
+              </TouchableOpacity>
+            </View>
+            
+            <View style={theme.extraGrid}>
+              <TouchableOpacity
+                style={[theme.largeBtn, { height: isCompact ? 60 : 75 }]}
+                onPress={() => handlePress(KEYS.INFO)}
+                activeOpacity={0.7}
+              >
+                <Text style={theme.text}>INFO</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[theme.largeBtn, { height: isCompact ? 60 : 75 }]}
+                onPress={() => handlePress(KEYS.SEARCH)}
+                activeOpacity={0.7}
+              >
+                <Text style={theme.text}>SEARCH</Text>
+              </TouchableOpacity>
+            </View>
 
-          <View style={[theme.row, { marginTop: 40, marginBottom: 40 }]}>
-            <TouchableOpacity style={theme.colorBtn} onPress={() => handlePress(KEYS.RED)}>{renderDots(1, '#FF3B30')}</TouchableOpacity>
-            <TouchableOpacity style={theme.colorBtn} onPress={() => handlePress(KEYS.GREEN)}>{renderDots(2, '#34C759')}</TouchableOpacity>
-            <TouchableOpacity style={theme.colorBtn} onPress={() => handlePress(KEYS.YELLOW)}>{renderDots(3, '#FFCC00')}</TouchableOpacity>
-            <TouchableOpacity style={theme.colorBtn} onPress={() => handlePress(KEYS.BLUE)}>{renderDots(4, '#007AFF')}</TouchableOpacity>
-          </View>
+            <View style={[theme.row, { width: '90%', marginVertical: isCompact ? 16 : 28 }]}>
+              <TouchableOpacity
+                style={[theme.colorBtn, { height: isCompact ? 44 : 50 }]}
+                onPress={() => handlePress(KEYS.RED)}
+                activeOpacity={0.7}
+              >
+                {renderDots(1, '#FF3B30')}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[theme.colorBtn, { height: isCompact ? 44 : 50 }]}
+                onPress={() => handlePress(KEYS.GREEN)}
+                activeOpacity={0.7}
+              >
+                {renderDots(2, '#34C759')}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[theme.colorBtn, { height: isCompact ? 44 : 50 }]}
+                onPress={() => handlePress(KEYS.YELLOW)}
+                activeOpacity={0.7}
+              >
+                {renderDots(3, '#FFCC00')}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[theme.colorBtn, { height: isCompact ? 44 : 50 }]}
+                onPress={() => handlePress(KEYS.BLUE)}
+                activeOpacity={0.7}
+              >
+                {renderDots(4, '#007AFF')}
+              </TouchableOpacity>
+            </View>
 
-          <View style={{ marginTop: 15 }}>
-            <Button title="Open Trackpad" color={isDark ? '#4DA8DA' : '#007AFF'} onPress={() => setShowTrackpad(true)} />
-          </View>
-
+            <View style={{ width: '85%', maxWidth: 260, marginVertical: rowMargin }}>
+              <TouchableOpacity
+                style={[theme.pillBtn, { height: btnHeight }]}
+                onPress={() => setShowTrackpad(true)}
+                activeOpacity={0.7}
+              >
+                <Text style={theme.pillBtnText}>Open Trackpad</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </View>
       </ScrollView>
 
       {/* TRACKPAD MODAL */}
       <Modal visible={showTrackpad} animationType="slide" transparent={true} onRequestClose={() => setShowTrackpad(false)}>
-        <View style={theme.trackpadContainer}>
+        <View style={[theme.trackpadContainer, { paddingTop: Math.max(insets.top + 10, 30) }]}>
           <View style={theme.trackpadHeader}>
             <Text style={theme.trackpadTitle}>Magic Trackpad</Text>
-            <TouchableOpacity onPress={() => setShowTrackpad(false)} style={theme.trackpadCloseBtn}>
+            <TouchableOpacity onPress={() => setShowTrackpad(false)} style={theme.trackpadCloseBtn} activeOpacity={0.7}>
               <Text style={theme.text}>Close</Text>
             </TouchableOpacity>
           </View>
@@ -215,17 +499,41 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
       {/* NUMPAD MODAL */}
       <Modal visible={showKeypad} animationType="slide" transparent={true} onRequestClose={() => setShowKeypad(false)}>
         <TouchableOpacity style={theme.modalContainer} activeOpacity={1} onPressOut={() => setShowKeypad(false)}>
-        <Pressable style={theme.keypad} onPress={(e) => e.stopPropagation()}>
+          <Pressable
+            style={[
+              theme.keypad,
+              {
+                paddingBottom: Math.max(insets.bottom + 10, 24),
+                maxWidth: 440,
+                alignSelf: 'center',
+                width: '100%'
+              }
+            ]}
+            onPress={(e) => e.stopPropagation()}
+          >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <TouchableOpacity key={num} style={theme.numBtn} onPress={() => handlePress(NUM_KEYS[num])}>
+              <TouchableOpacity
+                key={num}
+                style={theme.numBtn}
+                onPress={() => handlePress(NUM_KEYS[num])}
+                activeOpacity={0.6}
+              >
                 <Text style={theme.numText}>{num}</Text>
               </TouchableOpacity>
             ))}
             <View style={theme.emptyBtn} />
-            <TouchableOpacity style={theme.numBtn} onPress={() => handlePress(NUM_KEYS[0])}>
+            <TouchableOpacity
+              style={theme.numBtn}
+              onPress={() => handlePress(NUM_KEYS[0])}
+              activeOpacity={0.6}
+            >
               <Text style={theme.numText}>0</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={theme.closeBtn} onPress={() => setShowKeypad(false)}>
+            <TouchableOpacity
+              style={theme.closeBtn}
+              onPress={() => setShowKeypad(false)}
+              activeOpacity={0.7}
+            >
               <Text style={theme.numText}>X</Text>
             </TouchableOpacity>
           </Pressable>
@@ -233,7 +541,7 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
       </Modal>
       
       {/* SETTINGS MODAL */}
-      <Modal visible={showSettings} animationType="fade" transparent={true}>
+      <Modal visible={showSettings} animationType="fade" transparent={true} onRequestClose={() => setShowSettings(false)}>
         <View style={theme.modalContainerCentered}>
           <View style={theme.settingsPanel}>
             <Text style={theme.settingsHeader}>Settings</Text>
@@ -242,10 +550,11 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
               <Switch value={hapticsEnabled} onValueChange={setHapticsEnabled} />
             </View>
             <View style={theme.divider} />
-            <Text style={[theme.infoText, {marginBottom: 15}]}>TV IP: {ipAddress}</Text>
-            <Button title="Disconnect TV" color="#FF3B30" onPress={() => { setShowSettings(false); onDisconnect(); }} />
-            <View style={{ height: 10 }} />
-            <Button title="Close" onPress={() => setShowSettings(false)} />
+            <Text style={[theme.infoText, { marginBottom: 15 }]}>TV IP: {ipAddress}</Text>
+            <View style={{ width: '100%', gap: 10 }}>
+              <Button title="Disconnect TV" color="#FF3B30" onPress={() => { setShowSettings(false); onDisconnect(); }} />
+              <Button title="Close" onPress={() => setShowSettings(false)} />
+            </View>
           </View>
         </View>
       </Modal>
@@ -254,78 +563,233 @@ export default function NetCastRemote({ ipAddress, sessionId, onDisconnect }) {
 }
 
 const baseStyles = {
-  headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', width: '100%', paddingHorizontal: 20, marginTop: 10, marginBottom: 10, position: 'relative' },
-  settingsBtn: { position: 'absolute', right: 20, padding: 10 },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    marginVertical: 6,
+    position: 'relative'
+  },
+  settingsBtn: {
+    position: 'absolute',
+    right: 20,
+    padding: 8
+  },
   
-  page: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20 },
-  swipeHint: { marginTop: 20, fontSize: 12, opacity: 0.5 },
+  pageWrapper: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  pageContent: {
+    alignItems: 'center',
+    paddingHorizontal: 12
+  },
+  swipeHint: {
+    fontSize: 12,
+    opacity: 0.5,
+    textAlign: 'center',
+    marginTop: 4
+  },
 
-  row: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 10 },
-  column: { flexDirection: 'column', alignItems: 'center' },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12
+  },
+  column: {
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
   
   dpad: { 
     alignItems: 'center', 
     justifyContent: 'center', 
-    marginVertical: 20, 
-    width: 280, 
-    height: 280, 
-    borderRadius: 140, 
     position: 'relative',
     overflow: 'hidden'
   },
   dpadRingBtn: { 
     position: 'absolute', 
-    width: 80, 
-    height: 80, 
     alignItems: 'center', 
-    justifyContent: 'center', 
-    borderRadius: 40 
+    justifyContent: 'center'
   },
   dpadOkBtn: { 
-    width: 90, 
-    height: 90, 
-    borderRadius: 45, 
     alignItems: 'center', 
     justifyContent: 'center' 
   },
   
-  btn: { width: 85, height: 60, margin: 5, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
+  btn: {
+    margin: 4,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   
-  rocker: { width: 70, height: 140, borderRadius: 35, overflow: 'hidden' },
-  rockerHalf: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  rockerDivider: { height: 1, backgroundColor: '#888', width: '60%', alignSelf: 'center', opacity: 0.3 },
+  pillBtn: {
+    width: '100%',
+    borderRadius: 25,
+    backgroundColor: '#007AFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#007AFF',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3
+  },
+  pillBtnText: {
+    color: '#FFFFFF',
+    fontWeight: '600',
+    fontSize: 15
+  },
   
-  extraGrid: { flexDirection: 'row', justifyContent: 'center', width: '100%', marginVertical: 10 },
-  largeBtn: { padding: 20, margin: 10, borderRadius: 12, flex: 1, alignItems: 'center' },
+  rocker: {
+    overflow: 'hidden'
+  },
+  rockerHalf: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  rockerDivider: {
+    height: 1,
+    backgroundColor: '#888',
+    width: '60%',
+    alignSelf: 'center',
+    opacity: 0.3
+  },
   
-  colorBtn: { flex: 1, margin: 5, height: 60, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
-  colorDot: { width: 8, height: 8, borderRadius: 4, margin: 2 },
-  dotRow: { flexDirection: 'row', justifyContent: 'center' },
+  extraGrid: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    marginVertical: 8,
+    gap: 12
+  },
+  largeBtn: {
+    padding: 12,
+    borderRadius: 12,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  
+  colorBtn: {
+    flex: 1,
+    marginHorizontal: 4,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  colorDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    margin: 2
+  },
+  dotRow: {
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
 
-  modalContainer: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.7)' },
-  modalContainerCentered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.6)' },
-  keypad: { flexDirection: 'row', flexWrap: 'wrap', padding: 20, justifyContent: 'center', borderTopLeftRadius: 30, borderTopRightRadius: 30, paddingBottom: 40 },
-  numBtn: { width: '30%', padding: 20, margin: '1%', alignItems: 'center', borderRadius: 10 },
-  emptyBtn: { width: '30%', margin: '1%' },
-  closeBtn: { width: '30%', padding: 20, margin: '1%', alignItems: 'center', borderRadius: 10 },
-  settingsPanel: { width: '80%', padding: 20, borderRadius: 15, alignItems: 'center' },
-  switchRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginVertical: 15 },
-  divider: { width: '100%', height: 1, backgroundColor: '#555', marginVertical: 15 },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0.7)'
+  },
+  modalContainerCentered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    padding: 20
+  },
+  keypad: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: 20,
+    justifyContent: 'center',
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28
+  },
+  numBtn: {
+    width: '30%',
+    paddingVertical: 18,
+    margin: '1.5%',
+    alignItems: 'center',
+    borderRadius: 12
+  },
+  emptyBtn: {
+    width: '30%',
+    margin: '1.5%'
+  },
+  closeBtn: {
+    width: '30%',
+    paddingVertical: 18,
+    margin: '1.5%',
+    alignItems: 'center',
+    borderRadius: 12
+  },
+  settingsPanel: {
+    width: '90%',
+    maxWidth: 380,
+    padding: 24,
+    borderRadius: 18,
+    alignItems: 'center'
+  },
+  switchRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginVertical: 12
+  },
+  divider: {
+    width: '100%',
+    height: 1,
+    backgroundColor: '#555',
+    marginVertical: 12,
+    opacity: 0.3
+  },
 
-  // TRACKPAD STYLES
-  trackpadContainer: { flex: 1, paddingTop: 60, borderTopLeftRadius: 30, borderTopRightRadius: 30, marginTop: 50 },
-  trackpadHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 30, paddingBottom: 20 },
-  trackpadTitle: { fontSize: 20, fontWeight: 'bold' },
-  trackpadCloseBtn: { padding: 10, borderRadius: 8 },
-  trackpadSurface: { flex: 1, margin: 20, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
+  trackpadContainer: {
+    flex: 1,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    marginTop: 40
+  },
+  trackpadHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingBottom: 16
+  },
+  trackpadTitle: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  trackpadCloseBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8
+  },
+  trackpadSurface: {
+    flex: 1,
+    margin: 16,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 };
 
 const lightStyles = StyleSheet.create({
   ...baseStyles,
-  container: { flex: 1, backgroundColor: '#F2F2F7', paddingTop: 50 },
-  header: { fontSize: 20, fontWeight: 'bold', color: '#000' },
-  text: { color: '#000', fontSize: 13, fontWeight: '500' },
-  swipeHint: { ...baseStyles.swipeHint, color: '#000' },
+  container: { flex: 1, backgroundColor: '#F2F2F7' },
+  header: { fontSize: 20, fontWeight: 'bold', color: '#000000' },
+  text: { color: '#000000', fontSize: 13, fontWeight: '500' },
+  swipeHint: { ...baseStyles.swipeHint, color: '#000000' },
   btn: { ...baseStyles.btn, backgroundColor: '#E5E5EA' },
   rocker: { ...baseStyles.rocker, backgroundColor: '#E5E5EA' },
   largeBtn: { ...baseStyles.largeBtn, backgroundColor: '#E5E5EA' },
@@ -334,38 +798,38 @@ const lightStyles = StyleSheet.create({
   keypad: { ...baseStyles.keypad, backgroundColor: '#FFFFFF' },
   numBtn: { ...baseStyles.numBtn, backgroundColor: '#F2F2F7' },
   closeBtn: { ...baseStyles.closeBtn, backgroundColor: '#FF3B30' },
-  numText: { fontSize: 24, fontWeight: 'bold', color: '#000' },
+  numText: { fontSize: 22, fontWeight: 'bold', color: '#000000' },
   settingsPanel: { ...baseStyles.settingsPanel, backgroundColor: '#FFFFFF' },
-  settingsHeader: { fontSize: 22, fontWeight: 'bold', color: '#000', marginBottom: 10 },
-  infoText: { color: '#000', fontSize: 16 },
+  settingsHeader: { fontSize: 20, fontWeight: 'bold', color: '#000000', marginBottom: 10 },
+  infoText: { color: '#000000', fontSize: 15 },
   
   trackpadContainer: { ...baseStyles.trackpadContainer, backgroundColor: '#FFFFFF' },
-  trackpadTitle: { ...baseStyles.trackpadTitle, color: '#000' },
+  trackpadTitle: { ...baseStyles.trackpadTitle, color: '#000000' },
   trackpadCloseBtn: { ...baseStyles.trackpadCloseBtn, backgroundColor: '#E5E5EA' },
-  trackpadSurface: { ...baseStyles.trackpadSurface, backgroundColor: '#F2F2F7' },
+  trackpadSurface: { ...baseStyles.trackpadSurface, backgroundColor: '#F2F2F7' }
 });
 
 const darkStyles = StyleSheet.create({
   ...baseStyles,
-  container: { flex: 1, backgroundColor: '#000000', paddingTop: 50 },
+  container: { flex: 1, backgroundColor: '#000000' },
   header: { fontSize: 20, fontWeight: 'bold', color: '#FFFFFF' },
   text: { color: '#FFFFFF', fontSize: 13, fontWeight: '500' },
-  swipeHint: { ...baseStyles.swipeHint, color: '#FFF' },
+  swipeHint: { ...baseStyles.swipeHint, color: '#FFFFFF' },
   btn: { ...baseStyles.btn, backgroundColor: '#1C1C1E' },
   rocker: { ...baseStyles.rocker, backgroundColor: '#1C1C1E' },
   largeBtn: { ...baseStyles.largeBtn, backgroundColor: '#1C1C1E' },
-  colorBtn: { ...baseStyles.colorBtn, backgroundColor: '#333333' },
+  colorBtn: { ...baseStyles.colorBtn, backgroundColor: '#2C2C2E' },
   okBtn: { backgroundColor: '#2C2C2E' },
   keypad: { ...baseStyles.keypad, backgroundColor: '#1C1C1E' },
   numBtn: { ...baseStyles.numBtn, backgroundColor: '#2C2C2E' },
   closeBtn: { ...baseStyles.closeBtn, backgroundColor: '#FF453A' },
-  numText: { fontSize: 24, fontWeight: 'bold', color: '#FFFFFF' },
+  numText: { fontSize: 22, fontWeight: 'bold', color: '#FFFFFF' },
   settingsPanel: { ...baseStyles.settingsPanel, backgroundColor: '#1C1C1E' },
-  settingsHeader: { fontSize: 22, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 10 },
-  infoText: { color: '#FFF', fontSize: 16 },
+  settingsHeader: { fontSize: 20, fontWeight: 'bold', color: '#FFFFFF', marginBottom: 10 },
+  infoText: { color: '#FFFFFF', fontSize: 15 },
 
   trackpadContainer: { ...baseStyles.trackpadContainer, backgroundColor: '#1C1C1E' },
   trackpadTitle: { ...baseStyles.trackpadTitle, color: '#FFFFFF' },
-  trackpadCloseBtn: { ...baseStyles.trackpadCloseBtn, backgroundColor: '#333333' },
-  trackpadSurface: { ...baseStyles.trackpadSurface, backgroundColor: '#000000' },
+  trackpadCloseBtn: { ...baseStyles.trackpadCloseBtn, backgroundColor: '#2C2C2E' },
+  trackpadSurface: { ...baseStyles.trackpadSurface, backgroundColor: '#0B0B0C' }
 });

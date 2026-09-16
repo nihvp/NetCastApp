@@ -36,6 +36,10 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
@@ -45,6 +49,8 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  min-height: 100dvh;
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
   touch-action: pan-y pinch-zoom;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: transparent;
@@ -54,8 +60,29 @@ body {
 
 #app {
   width: 100%;
-  padding: 0;
-  box-sizing: border-box;
+  max-width: 420px;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-color);
+}
+
+/* Tablet & Desktop Card Frame */
+@media (min-width: 520px) {
+  body {
+    background-color: #0A0A0C;
+    padding: 20px;
+  }
+  #app {
+    height: min(880px, 94dvh);
+    border-radius: 40px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
 }
 
 .screen {
@@ -63,12 +90,15 @@ body {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  height: 100%;
   animation: fadeIn 0.2s ease-out;
+  overflow: hidden;
 }
 
 #auth-screen {
   padding: 24px;
-  box-sizing: border-box;
+  justify-content: center;
+  overflow-y: auto;
 }
 
 @keyframes fadeIn {
@@ -81,7 +111,7 @@ body {
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   margin-bottom: 8px;
 }
@@ -94,39 +124,39 @@ h2 {
 
 p {
   color: var(--text-secondary);
-  font-size: 15px;
-  margin-bottom: 24px;
+  font-size: 14px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
 /* Inputs & Auth */
 input {
   width: 100%;
-  padding: 16px;
-  margin-bottom: 16px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
   border-radius: var(--radius-sm);
-  border: none;
+  border: 1px solid transparent;
   background: var(--surface);
   color: var(--text-primary);
-  font-size: 17px;
-  box-sizing: border-box;
+  font-size: 16px;
   box-shadow: 0 4px 12px var(--shadow-color);
 }
 
 input:focus {
   outline: none;
   background: var(--surface-active);
+  border-color: var(--accent);
 }
 
 /* General Buttons */
 .btn {
   width: 100%;
-  padding: 16px;
+  padding: 14px;
   border: none;
   border-radius: var(--radius-sm);
   background: var(--surface);
   color: var(--text-primary);
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
@@ -162,16 +192,18 @@ input:focus {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 32px;
+  padding: 16px 20px 8px;
+  position: relative;
 }
+
 .header h2 {
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .btn.small {
   width: auto;
-  padding: 8px 16px;
-  font-size: 14px;
+  padding: 8px 14px;
+  font-size: 13px;
   border-radius: var(--radius-pill);
 }
 
@@ -179,25 +211,27 @@ input:focus {
 .remote-row {
   display: flex;
   justify-content: center;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
-  margin-bottom: 32px;
+  margin-bottom: clamp(8px, 1.8dvh, 16px);
 }
 
 .remote-row .btn {
   flex: 1;
-  height: 64px;
+  height: clamp(44px, 6dvh, 54px);
+  border-radius: 12px;
 }
 
 .remote-row .power {
   color: var(--danger);
+  font-weight: 700;
 }
 .remote-row .power svg {
   stroke: var(--danger);
 }
 
 .remote-row .large {
-  height: 90px;
+  height: clamp(54px, 8dvh, 70px);
   font-weight: 600;
 }
 
@@ -207,20 +241,21 @@ input:focus {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-bottom: 32px;
+  margin-bottom: clamp(8px, 1.8dvh, 16px);
   background: var(--dpad-surface);
   border-radius: 50%;
-  width: 280px;
-  height: 280px;
+  width: clamp(200px, 28dvh, 240px);
+  height: clamp(200px, 28dvh, 240px);
   position: relative;
   box-shadow: none;
+  flex-shrink: 0;
 }
 
 .dpad .btn {
   position: absolute;
   background: transparent;
-  width: 80px;
-  height: 80px;
+  width: clamp(56px, 8dvh, 72px);
+  height: clamp(56px, 8dvh, 72px);
   border-radius: 50%;
   margin: 0;
   box-shadow: none;
@@ -244,11 +279,11 @@ input:focus {
 
 .dpad .btn.ok {
   background: var(--dpad-center);
-  width: 90px;
-  height: 90px;
-  border-radius: 45px;
+  width: clamp(66px, 9.2dvh, 80px);
+  height: clamp(66px, 9.2dvh, 80px);
+  border-radius: 50%;
   position: relative;
-  font-weight: 600;
+  font-weight: 700;
   box-shadow: 0 4px 12px var(--shadow-color);
 }
 
@@ -257,15 +292,15 @@ input:focus {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  margin-bottom: 32px;
+  margin-bottom: clamp(8px, 1.8dvh, 16px);
 }
 
 .rocker {
   display: flex;
   flex-direction: column;
-  width: 76px;
-  height: 160px;
-  border-radius: 38px;
+  width: 70px;
+  height: clamp(112px, 15dvh, 134px);
+  border-radius: 35px;
   background: var(--surface);
   overflow: hidden;
   box-shadow: 0 4px 12px var(--shadow-color);
@@ -277,7 +312,7 @@ input:focus {
   color: var(--text-primary);
   border: none;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -290,25 +325,25 @@ input:focus {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 85px;
+  width: 82px;
 }
 .center-col .btn {
-  height: 64px;
+  height: clamp(44px, 6dvh, 54px);
   border-radius: var(--radius-pill);
 }
 
 /* Color Buttons */
 .color-grid {
   display: flex;
-  gap: 16px;
+  gap: 10px;
   width: 100%;
   justify-content: center;
-  margin-bottom: 32px;
+  margin-bottom: clamp(14px, 3dvh, 28px);
 }
 
 .color-btn {
   flex: 1;
-  height: 50px;
+  height: clamp(40px, 5.5dvh, 48px);
   border-radius: var(--radius-pill);
   box-shadow: none;
   display: flex;
@@ -324,7 +359,7 @@ input:focus {
   width: 6px;
   height: 6px;
   border-radius: 3px;
-  background-color: rgba(255, 255, 255, 0.6);
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
 /* Horizontal Scroll Container */
@@ -332,7 +367,8 @@ input:focus {
   display: flex;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  width: 100vw;
+  width: 100%;
+  flex: 1;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
@@ -341,13 +377,15 @@ input:focus {
 }
 
 .page {
-  flex: 0 0 100vw;
+  flex: 0 0 100%;
+  width: 100%;
   scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
-  box-sizing: border-box;
+  padding: 0 16px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .page-content {
@@ -356,40 +394,54 @@ input:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100%;
+  justify-content: space-evenly;
+  min-height: 100%;
+  padding: 4px 0;
 }
 
 /* Pagination Dots */
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 8px;
-  padding: 16px 0;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0 max(8px, env(safe-area-inset-bottom, 8px));
   width: 100%;
+  flex-shrink: 0;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 5px;
   background: var(--text-secondary);
   opacity: 0.3;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.2s;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.dot:hover {
+  opacity: 0.6;
 }
 .dot.active {
   opacity: 1;
+  transform: scale(1.2);
+  background: var(--accent);
 }
 
 /* Modals */
 .modal {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: flex-end;
   z-index: 100;
   animation: fadeBg 0.2s ease-out;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 @keyframes fadeBg {
   from { opacity: 0; }
@@ -398,34 +450,53 @@ input:focus {
 
 .modal-content {
   width: 100%;
-  height: 85vh;
+  max-width: 420px;
+  max-height: 85vh;
+  max-height: 85dvh;
   background: var(--bg-color);
-  border-top-left-radius: 20px;
-  border-top-right-radius: 20px;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
   padding: 24px;
-  box-sizing: border-box;
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 24px));
   display: flex;
   flex-direction: column;
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
 }
 @keyframes slideUp {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
 }
 
+@media (min-width: 520px) {
+  .modal {
+    align-items: center;
+  }
+  .modal-content {
+    border-radius: 28px;
+    max-height: 80vh;
+    animation: zoomIn 0.2s ease-out;
+  }
+  @keyframes zoomIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+}
+
 /* Numpad */
 .numpad-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .num-btn {
-  height: 70px;
+  height: clamp(54px, 8dvh, 64px);
   border-radius: var(--radius-sm);
-  font-size: 22px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 600;
   background: var(--surface);
 }
 
@@ -438,6 +509,8 @@ input:focus {
 .trackpad-container {
   display: flex;
   flex-direction: column;
+  height: 80vh;
+  height: 80dvh;
 }
 
 .trackpad-surface {
@@ -447,7 +520,7 @@ input:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   touch-action: none;
   box-shadow: 0 4px 20px var(--shadow-color);
 }
@@ -456,4 +529,5 @@ input:focus {
   opacity: 0.4;
   margin: 0;
   font-weight: 500;
+  pointer-events: none;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, Button, Text, StyleSheet, AppState } from 'react-native';
+import { View, ActivityIndicator, Button, Text, StyleSheet, AppState, StatusBar, useColorScheme } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NetCastAuth from './src/NetCastAuth';
 import NetCastRemote from './src/NetCastRemote';
@@ -9,6 +10,7 @@ export default function App() {
   const [sessionId, setSessionId] = useState(null);
   const [savedPin, setSavedPin] = useState(null);
   const [loading, setLoading] = useState(true);
+  const isDark = useColorScheme() === 'dark';
 
   useEffect(() => {
     const loadSession = async () => {
@@ -80,27 +82,39 @@ export default function App() {
     setLoading(false);
   };
 
-  if (loading) return <View style={styles.center}><ActivityIndicator size="large" /></View>;
+  if (loading) {
+    return (
+      <SafeAreaProvider>
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={isDark ? '#000000' : '#F2F2F7'} />
+        <View style={[styles.center, { backgroundColor: isDark ? '#000000' : '#F2F2F7' }]}>
+          <ActivityIndicator size="large" color={isDark ? '#FFFFFF' : '#007AFF'} />
+        </View>
+      </SafeAreaProvider>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      {sessionId && ipAddress ? (
-        <NetCastRemote ipAddress={ipAddress} sessionId={sessionId} onDisconnect={handleDisconnect} />
-      ) : ipAddress && savedPin ? (
-        <View style={styles.center}>
-          <Text style={{ fontSize: 18, marginBottom: 20 }}>TV Offline</Text>
-          <Button title="Tap to Reconnect" onPress={silentReconnect} />
-          <View style={{ height: 20 }} />
-          <Button title="Forget TV" color="red" onPress={forgetTv} />
-        </View>
-      ) : (
-        <NetCastAuth onAuthSuccess={handleAuthSuccess} />
-      )}
-    </View>
+    <SafeAreaProvider>
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={isDark ? '#000000' : '#F2F2F7'} />
+      <View style={[styles.container, { backgroundColor: isDark ? '#000000' : '#F2F2F7' }]}>
+        {sessionId && ipAddress ? (
+          <NetCastRemote ipAddress={ipAddress} sessionId={sessionId} onDisconnect={handleDisconnect} />
+        ) : ipAddress && savedPin ? (
+          <View style={styles.center}>
+            <Text style={{ fontSize: 18, marginBottom: 20, color: isDark ? '#FFFFFF' : '#000000' }}>TV Offline</Text>
+            <Button title="Tap to Reconnect" onPress={silentReconnect} />
+            <View style={{ height: 20 }} />
+            <Button title="Forget TV" color="#FF3B30" onPress={forgetTv} />
+          </View>
+        ) : (
+          <NetCastAuth onAuthSuccess={handleAuthSuccess} />
+        )}
+      </View>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingBottom: 40 },
+  container: { flex: 1 },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' }
 });
