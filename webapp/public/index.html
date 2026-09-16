@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>NetCast Remote</title>
   <link rel="icon" type="image/png" href="assets/logo.png?v=2">
   <link rel="shortcut icon" href="assets/logo.png?v=2">
@@ -17,18 +17,18 @@
     <div id="auth-screen" class="screen">
       <h1>NetCast TV Remote</h1>
       
-      <div id="discovery-section" style="width: 100%; margin-top: 40px;">
+      <div id="discovery-section" style="width: 100%; margin-top: 30px;">
         <button id="btn-discover" class="btn primary">Scan Network</button>
-        <p id="discovery-status" style="margin-top: 16px;"></p>
+        <p id="discovery-status" style="margin-top: 14px;"></p>
       </div>
 
-      <div id="manual-ip-section" style="width: 100%; margin-top: 20px;">
+      <div id="manual-ip-section" style="width: 100%; margin-top: 16px;">
         <p style="margin-bottom: 8px;">Or connect manually</p>
         <input type="text" id="tv-ip" placeholder="192.168.x.x">
         <button id="btn-request-pin" class="btn">Connect</button>
       </div>
 
-      <div id="pin-section" class="hidden" style="width: 100%; margin-top: 30px;">
+      <div id="pin-section" class="hidden" style="width: 100%; margin-top: 24px;">
         <p style="margin-bottom: 8px;">Enter PIN shown on TV</p>
         <input type="text" id="tv-pin" placeholder="PIN Code">
         <button id="btn-pair" class="btn primary">Pair Device</button>
@@ -38,9 +38,9 @@
     <!-- Remote Screen -->
     <div id="remote-screen" class="screen hidden" style="padding: 0;">
       
-      <div class="header" style="position: relative; display: flex; justify-content: center; align-items: center; padding: 24px 24px 0 24px; margin-bottom: 0;">
+      <div class="header">
         <h2>NetCast Remote</h2>
-        <button id="btn-show-app-settings" class="btn small" style="position: absolute; right: 24px; width: 40px; height: 40px; padding: 0; border-radius: 20px;"><i data-lucide="settings"></i></button>
+        <button id="btn-show-app-settings" class="btn small" style="position: absolute; right: 20px; width: 38px; height: 38px; padding: 0; border-radius: 50%;"><i data-lucide="settings"></i></button>
       </div>
 
       <div class="scroll-container">
@@ -54,13 +54,13 @@
             </div>
 
             <div class="dpad">
-              <button class="btn remote-btn up" data-key="12"><i data-lucide="chevron-up"></i></button>
+              <button class="btn remote-btn up" data-key="12" aria-label="Up"><i data-lucide="chevron-up"></i></button>
               <div class="dpad-middle">
-                <button class="btn remote-btn left" data-key="14"><i data-lucide="chevron-left"></i></button>
+                <button class="btn remote-btn left" data-key="14" aria-label="Left"><i data-lucide="chevron-left"></i></button>
                 <button class="btn remote-btn ok" data-key="20">OK</button>
-                <button class="btn remote-btn right" data-key="15"><i data-lucide="chevron-right"></i></button>
+                <button class="btn remote-btn right" data-key="15" aria-label="Right"><i data-lucide="chevron-right"></i></button>
               </div>
-              <button class="btn remote-btn down" data-key="13"><i data-lucide="chevron-down"></i></button>
+              <button class="btn remote-btn down" data-key="13" aria-label="Down"><i data-lucide="chevron-down"></i></button>
             </div>
             
             <div class="rocker-row">
@@ -88,39 +88,39 @@
               <button class="btn remote-btn" data-key="47">Input</button>
             </div>
 
-            <div style="margin-top: 16px; width: 100%;">
+            <div style="width: 100%;">
               <button id="btn-show-numpad" class="btn primary pill">Open Numpad</button>
             </div>
 
-            <p style="margin-top: 24px; font-size: 13px; opacity: 0.5;">Swipe left for more controls &rarr;</p>
+            <p style="margin-top: 8px; font-size: 12px; opacity: 0.5;">Swipe or click dots for more controls &rarr;</p>
           </div>
         </div>
 
         <!-- Page 2: Extras -->
         <div class="page">
-          <div class="page-content" style="justify-content: center; padding-bottom: 60px;">
+          <div class="page-content">
             
-            <div class="remote-row" style="margin-bottom: 12px;">
+            <div class="remote-row">
               <button class="btn remote-btn large" data-key="417">APPS</button>
               <button class="btn remote-btn large" data-key="412">EXIT</button>
             </div>
             
-            <div class="remote-row" style="margin-bottom: 40px;">
+            <div class="remote-row">
               <button class="btn remote-btn large" data-key="45">INFO</button>
               <button class="btn remote-btn large" data-key="411">SEARCH</button>
             </div>
 
-            <div class="color-grid" style="margin-bottom: 40px;">
-              <button class="btn remote-btn color-btn" style="background: var(--danger)" data-key="31">
+            <div class="color-grid">
+              <button class="btn remote-btn color-btn" style="background: var(--danger)" data-key="31" aria-label="Red button">
                 <div class="color-dot"></div>
               </button>
-              <button class="btn remote-btn color-btn" style="background: #34c759" data-key="30">
+              <button class="btn remote-btn color-btn" style="background: #34c759" data-key="30" aria-label="Green button">
                 <div class="color-dot"></div><div class="color-dot"></div>
               </button>
-              <button class="btn remote-btn color-btn" style="background: #ffcc00" data-key="32">
+              <button class="btn remote-btn color-btn" style="background: #ffcc00" data-key="32" aria-label="Yellow button">
                 <div class="color-dot"></div><div class="color-dot"></div><div class="color-dot"></div>
               </button>
-              <button class="btn remote-btn color-btn" style="background: var(--accent)" data-key="29">
+              <button class="btn remote-btn color-btn" style="background: var(--accent)" data-key="29" aria-label="Blue button">
                 <div class="color-dot"></div><div class="color-dot"></div><div class="color-dot"></div><div class="color-dot"></div>
               </button>
             </div>
@@ -134,15 +134,15 @@
       </div>
       
       <div class="pagination">
-        <div class="dot active"></div>
-        <div class="dot"></div>
+        <button class="dot active" data-page="0" aria-label="Go to Page 1"></button>
+        <button class="dot" data-page="1" aria-label="Go to Page 2"></button>
       </div>
     </div>
     
     <!-- App Settings Modal -->
     <div id="app-settings-modal" class="modal hidden">
-      <div class="modal-content" style="height: auto; max-height: 50vh; border-top-left-radius: 20px; border-top-right-radius: 20px; padding-bottom: 40px;">
-        <div class="header">
+      <div class="modal-content">
+        <div class="header" style="padding: 0 0 16px 0;">
           <h2>App Settings</h2>
           <button id="btn-close-app-settings" class="btn small">Close</button>
         </div>

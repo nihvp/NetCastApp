@@ -137,12 +137,23 @@ if (scrollContainer && dots.length > 0) {
   scrollContainer.addEventListener('scroll', () => {
     const scrollLeft = scrollContainer.scrollLeft;
     const width = scrollContainer.clientWidth;
-    const pageIndex = Math.round(scrollLeft / width);
+    const pageIndex = Math.min(Math.round(scrollLeft / width), dots.length - 1);
     
     dots.forEach((dot, index) => {
       dot.classList.toggle('active', index === pageIndex);
     });
   }, { passive: true });
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const pageIndex = parseInt(dot.getAttribute('data-page') || '0', 10);
+      const width = scrollContainer.clientWidth;
+      scrollContainer.scrollTo({
+        left: pageIndex * width,
+        behavior: 'smooth'
+      });
+    });
+  });
 }
 
 // --- Modals ---
